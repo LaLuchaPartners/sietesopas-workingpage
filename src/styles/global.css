@@ -11,6 +11,17 @@
   }
 }
 
+@font-face {
+  font-family: 'OPTIStymie';
+  src: url('/OPTIStymie-MediumCond.ttf.eot');
+  src: url('/OPTIStymie-MediumCond.ttf.eot?#iefix') format('embedded-opentype'),
+       url('/OPTIStymie-MediumCond.ttf.woff') format('woff'),
+       url('/OPTIStymie-MediumCond.ttf.svg#OPTIStymie-MediumCond') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer components {
   .animate-fade-in {
     animation: fadeIn 1.2s ease-out forwards;
@@ -73,4 +84,14 @@
 /* Button glow effect on hover */
 .button-glow:hover {
   filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+}
+
+.button-text {
+  font-family: 'OPTIStymie', serif !important;
+  color: white;
+  text-align: center;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+  display: block;
 }
