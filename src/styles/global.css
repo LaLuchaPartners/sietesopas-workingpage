@@ -7,16 +7,13 @@
 @layer base {
   body {
     @apply m-0 p-0 overflow-hidden bg-black;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: 'CustomFont', system-ui, -apple-system, sans-serif;
   }
 }
 
 @font-face {
-  font-family: 'OPTIStymie';
-  src: url('/OPTIStymie-MediumCond.ttf.eot');
-  src: url('/OPTIStymie-MediumCond.ttf.eot?#iefix') format('embedded-opentype'),
-       url('/OPTIStymie-MediumCond.ttf.woff') format('woff'),
-       url('/OPTIStymie-MediumCond.ttf.svg#OPTIStymie-MediumCond') format('svg');
+  font-family: 'CustomFont';
+  src: url('/fuente.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -87,7 +84,7 @@
 }
 
 .button-text {
-  font-family: 'OPTIStymie', serif !important;
+  font-family: 'CustomFont', serif !important;
   color: white;
   text-align: center;
   line-height: 1;
