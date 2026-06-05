@@ -13,7 +13,7 @@
 
 @font-face {
   font-family: 'CustomFont';
-  src: url('/fuente.TTF') format('truetype');
+  src: url('../assets/fuente.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
