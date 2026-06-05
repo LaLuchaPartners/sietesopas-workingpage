@@ -25,6 +25,11 @@
     opacity: 0;
   }
 
+  .animate-fade-in-bg {
+    animation: fadeInBg 1.2s ease-out forwards;
+    opacity: 0;
+  }
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
@@ -44,6 +49,15 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeInBg {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
