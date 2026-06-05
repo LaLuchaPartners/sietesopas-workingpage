@@ -3,8 +3,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://LaLuchaPartners.github.io',
-  base: '/sietesopas-workingpage/',
+  site: 'https://sietesopas.com',
+  base: '/',
   vite: {
     plugins: [tailwindcss()]
   }
