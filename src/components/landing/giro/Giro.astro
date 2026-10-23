@@ -1,0 +1,79 @@
+---
+// Sección: Giro
+// Assets en src/assets/giro/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import fondo from "../../../assets/giro/imagenes/fondo.mp4?url";
+import fondoMovil from "../../../assets/giro/imagenes/fondo-movil.mp4?url";
+import logo from "../../../assets/giro/logos/siete-sopas-logo.webp";
+import delivery from "../../../assets/giro/logos/delivery.webp";
+---
+
+<section id="giro" class="relative w-full overflow-hidden">
+  <!-- Video de fondo -->
+  <video
+    class="giro-video absolute left-0 w-full object-cover"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  >
+    <!-- Móvil: versión 1280px más liviana; escritorio: original sin recomprimir -->
+    <source src={fondoMovil} type="video/mp4" media="(max-width: 767px)" />
+    <source src={fondo} type="video/mp4" />
+  </video>
+
+  <!-- Logo (izquierda) y Delivery (derecha) -->
+  <header
+    class="relative z-10 flex items-start justify-between px-6 pt-6 md:px-12 md:pt-10"
+  >
+    <Image
+      src={logo}
+      alt="Siete Sopas 24 horas"
+      class="w-[140px] md:w-[220px] h-auto drop-shadow-lg"
+      loading="eager"
+    />
+    <Image
+      src={delivery}
+      alt="Delivery"
+      class="w-[150px] md:w-[240px] h-auto drop-shadow-lg"
+      loading="eager"
+    />
+  </header>
+</section>
+
+<style>
+  /* ===== Ajustes del fondo ===== */
+  #giro {
+    /* Altura de la sección en móvil.
+       75vw   = video completo, sin recortes (el video es 4:3 → alto = 75% del ANCHO)
+       100svh = pantalla completa (recorta el video arriba/abajo) */
+    --giro-altura: 75vw;
+    /* Altura de la sección en escritorio (≥ 768px) */
+    --giro-altura-md: 75vw;
+    /* Solo aplica cuando el video se recorta (altura menor a 75vw):
+       0% = se ve la parte de arriba, 50% = centro, 100% = parte de abajo */
+    --giro-foco: 35%;
+    /* Cuánto se sube el video para esconder la franja blanca que trae arriba.
+       Si ves la línea blanca, auméntalo (ej. 20px, 30px); si se corta de más, bájalo.
+       1.6vw = justo el grosor de la franja cuando el video se ve completo. */
+    --giro-subir: 1.6vw;
+
+    height: var(--giro-altura);
+  }
+
+  /* El video se extiende por arriba y por abajo de la sección
+     (la sección oculta lo que sobra), así no se ven las franjas blancas */
+  .giro-video {
+    top: calc(-1 * var(--giro-subir));
+    height: calc(100% + 2 * var(--giro-subir));
+    object-position: center var(--giro-foco);
+  }
+
+  @media (min-width: 768px) {
+    #giro {
+      height: var(--giro-altura-md);
+    }
+  }
+</style>
