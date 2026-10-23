@@ -1,0 +1,83 @@
+---
+// Sección: Carta2 (la carta en el atril + botón "Ver")
+// Assets en src/assets/carta/carta2/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import fondo from "../../../../assets/carta/carta2/imagenes/fondo.mp4?url";
+import fondoMovil from "../../../../assets/carta/carta2/imagenes/fondo-movil.mp4?url";
+import botonVer from "../../../../assets/carta/carta2/imagenes/boton-ver.webp";
+---
+
+<section id="carta2" class="relative w-full overflow-hidden">
+  <!-- Video de fondo -->
+  <video
+    class="carta2-video absolute inset-x-0 w-full object-cover"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  >
+    <source src={fondoMovil} type="video/mp4" media="(max-width: 767px)" />
+    <source src={fondo} type="video/mp4" />
+  </video>
+
+  <!-- Botón "Ver" → página de la carta -->
+  <a
+    href={`${import.meta.env.BASE_URL}carta`}
+    class="carta2-boton absolute z-10"
+    aria-label="Ver la carta"
+  >
+    <Image src={botonVer} alt="Ver" class="w-full h-auto" />
+  </a>
+</section>
+
+<style>
+  /* ===== Ajustes de Carta2 =====
+     Todo está en vw (proporcional al ancho), así que se ve igual en móvil y escritorio. */
+  #carta2 {
+    /* Cuánto se mete Carta2 por debajo de Carta1 (más grande = más arriba).
+       El final de Carta1 se desvanece y deja ver este video. */
+    --carta2-subir: 29.5vw;
+    /* Altura de la sección (75vw = video completo; más chico = se recorta abajo) */
+    --carta2-altura: 75vw;
+    /* Botón "Ver": distancia desde el borde superior y tamaño */
+    --carta2-boton-arriba: 8.8vw;
+    --carta2-boton-ancho: 30vw;
+    /* Cuánto crece el botón al pasar el mouse (1.1 = 10% más grande) */
+    --carta2-boton-hover: 1.1;
+
+    height: var(--carta2-altura);
+    margin-top: calc(-1 * var(--carta2-subir));
+  }
+
+  /* El video trae franjas blancas de 6px arriba y abajo: se agranda un poco
+     y la sección (overflow-hidden) recorta ese sobrante */
+  .carta2-video {
+    max-width: none;
+    top: -0.4vw;
+    height: calc(75vw + 0.8vw);
+  }
+
+  .carta2-boton {
+    top: var(--carta2-boton-arriba);
+    width: var(--carta2-boton-ancho);
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .carta2-boton:hover,
+  .carta2-boton:focus-visible {
+    transform: translateX(-50%) scale(var(--carta2-boton-hover));
+    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
+  }
+
+  .carta2-boton:active {
+    transform: translateX(-50%) scale(0.97);
+  }
+
+  .carta2-boton:focus-visible {
+    outline: none;
+  }
+</style>
