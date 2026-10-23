@@ -358,8 +358,13 @@ const anchoReferencia = tiendas1.width;
   const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (seccion && imagenes.length > 1 && !sinMovimiento) {
-    const leerMs = (nombre: string) =>
-      parseFloat(getComputedStyle(seccion).getPropertyValue(nombre)) || 0;
+    // Lee un tiempo del CSS en milisegundos. Respeta la unidad: al compilar,
+    // el CSS se minifica y "2500ms" pasa a "2.5s".
+    const leerMs = (nombre: string) => {
+      const valor = getComputedStyle(seccion).getPropertyValue(nombre).trim();
+      const numero = parseFloat(valor) || 0;
+      return valor.endsWith("ms") ? numero : numero * 1000;
+    };
     const pausa = leerMs("--tiendas-animacion-pausa");
     const transicion = leerMs("--tiendas-animacion-transicion");
 
