@@ -1,0 +1,67 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import fondo from '../assets/vistas/carta/imagenes/fondo.mp4?url';
+import fondoMovil from '../assets/vistas/carta/imagenes/fondo-movil.mp4?url';
+import carta from '../assets/vistas/carta/imagenes/carta.webp';
+---
+
+<Layout title="Carta | Siete Sopas" description="La carta de Siete Sopas">
+  <main id="vista-carta" class="min-h-svh flex items-center justify-center">
+    <!-- Marco con la proporción del video, a todo el ancho de la pantalla -->
+    <div class="vista-carta-marco relative">
+      <!-- Video de fondo (borde rojo con la hoja de papel) -->
+      <video
+        class="absolute inset-0 w-full h-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+      >
+        <source src={fondoMovil} type="video/mp4" media="(max-width: 767px)" />
+        <source src={fondo} type="video/mp4" />
+      </video>
+
+      <!-- La carta, al centro de la hoja -->
+      <Image
+        src={carta}
+        alt="Carta de Siete Sopas"
+        class="vista-carta-imagen absolute h-auto"
+        loading="eager"
+        quality={95}
+      />
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* ===== Ajustes de la vista Carta ===== */
+  #vista-carta {
+    /* Tamaño de la carta respecto al marco (100% = todo el ancho del video).
+       76% llena la hoja de papel; más grande ya se sale de la hoja. */
+    --carta-ancho: 76%;
+    /* Mover la carta (positivo = derecha / abajo, negativo = izquierda / arriba) */
+    --carta-mover-x: 0%;
+    --carta-mover-y: 0%;
+    /* Color de relleno a los costados en pantallas más anchas que el video */
+    --carta-fondo-color: #da1828;
+
+    background: var(--carta-fondo-color);
+  }
+
+  /* El video es 4960×3680: el marco ocupa todo el ancho de la pantalla
+     (si es más alto que la pantalla, se hace scroll) */
+  .vista-carta-marco {
+    aspect-ratio: 4960 / 3680;
+    width: 100%;
+  }
+
+  .vista-carta-imagen {
+    width: var(--carta-ancho);
+    left: calc(50% + var(--carta-mover-x));
+    top: calc(50% + var(--carta-mover-y));
+    transform: translate(-50%, -50%);
+  }
+</style>
