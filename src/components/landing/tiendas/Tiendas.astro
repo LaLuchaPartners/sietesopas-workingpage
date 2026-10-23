@@ -1,0 +1,385 @@
+---
+// Sección: Tiendas (incluye el footer: comparten el mismo fondo)
+// Assets en src/assets/tiendas/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import fondo from "../../../assets/tiendas/imagenes/fondo.webp";
+import titulo from "../../../assets/tiendas/imagenes/titulo.webp";
+import tiendas1 from "../../../assets/tiendas/imagenes/tiendas-1.webp";
+import tiendas2 from "../../../assets/tiendas/imagenes/tiendas-2.webp";
+import tiendas3 from "../../../assets/tiendas/imagenes/tiendas-3.webp";
+import tiendas4 from "../../../assets/tiendas/imagenes/tiendas-4.webp";
+import libroReclamaciones from "../../../assets/tiendas/imagenes/libro-reclamaciones.webp";
+import facturacion from "../../../assets/tiendas/imagenes/facturacion.webp";
+import tiktok from "../../../assets/tiendas/imagenes/tiktok.webp";
+import instagram from "../../../assets/tiendas/imagenes/instagram.webp";
+import logo from "../../../assets/tiendas/imagenes/logo.webp";
+
+const base = import.meta.env.BASE_URL;
+
+// Enlaces del footer. Los que están en "#" faltan definir.
+const enlaces = {
+  politicaPrivacidad: "#",
+  terminosCondiciones: "#",
+  datosPersonales: "#",
+  cartaRestaurantes: `${base}carta`,
+  localesLima: "#",
+  oficinas: "#",
+  libroReclamaciones: "https://lalucha.com.pe/reclamos/",
+  facturacion: "https://comprobantes.lalucha.com.pe",
+  tiktok: "#",
+  instagram: "#",
+};
+
+// Imágenes de tiendas que van rotando (animación al final del archivo).
+// No miden lo mismo: "dx" es el corrimiento en px (medido sobre la imagen original)
+// para que las flechas y los iconos de todas caigan en el mismo sitio que en la 1.
+// (tiendas-5, 6 y 7 son copias de la 1, 2 y 3, por eso no se usan)
+const tiendas = [
+  { src: tiendas1, alt: "Sedes Angamos, Kennedy y Gamarra", dx: 0 },
+  { src: tiendas2, alt: "Sedes Santa Anita, Ricardo Palma y Plaza Norte", dx: 38 },
+  { src: tiendas3, alt: "Sedes San Juan de Lurigancho, Surco y Lince Terrazas", dx: 36 },
+  { src: tiendas4, alt: "Sedes Independencia, Lince y Trujillo", dx: 6 },
+];
+// Ancho de la tienda 1 en px: es la referencia para escalar todas por igual
+const anchoReferencia = tiendas1.width;
+---
+
+<section id="tiendas" class="relative w-full overflow-hidden">
+  <!-- Fondo (queda por debajo de la madera del final de Sabor).
+       Llena siempre toda la sección: así no queda una franja negra abajo cuando
+       la barra de scroll hace que la página sea un poco más angosta que 100vw. -->
+  <Image
+    src={fondo}
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 w-full h-full object-cover object-top pointer-events-none"
+    widths={[1000, 2000, 2976]}
+    sizes="100vw"
+  />
+
+  <!-- Título y texto -->
+  <div class="tiendas-contenido absolute inset-x-0 z-10 flex flex-col items-center text-center">
+    <h2 class="tiendas-titulo">
+      <Image src={titulo} alt="Tiendas" class="w-full h-auto" />
+    </h2>
+
+    <p class="tiendas-texto">
+      Te invitamos a recorrer nuestras sedes y descubrir por qué, en cualquier
+      punto del mapa, Siete Sopas es el lugar donde el Perú se siente en
+      familia.
+    </p>
+  </div>
+
+  <!-- Tiendas: todas en el mismo lugar, alineadas por abajo, cambian con un desvanecido -->
+  <div class="tiendas-imagenes absolute inset-x-0 z-10">
+    {
+      tiendas.map((tienda, i) => (
+        <Image
+          src={tienda.src}
+          alt={tienda.alt}
+          class:list={["tiendas-imagen absolute bottom-0 h-auto", { visible: i === 0 }]}
+          style={`--ancho-relativo: ${tienda.src.width / anchoReferencia}; --dx-relativo: ${tienda.dx / anchoReferencia};`}
+          widths={[800, tienda.src.width]}
+          sizes="90vw"
+        />
+      ))
+    }
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer" class="tiendas-footer absolute inset-x-0 bottom-0 z-10">
+    <div class="footer-grilla">
+      <!-- Fila 1: títulos -->
+      <h3 class="footer-titulo">Nosotros</h3>
+      <h3 class="footer-titulo">Servicios</h3>
+      <h3 class="footer-titulo">Contáctanos</h3>
+      <Image src={logo} alt="Siete Sopas" class="footer-logo h-auto" />
+
+      <!-- Fila 2: enlaces -->
+      <ul class="footer-enlaces">
+        <li><a href={enlaces.politicaPrivacidad}>Política de Privacidad</a></li>
+        <li><a href={enlaces.terminosCondiciones}>Términos y Condiciones</a></li>
+        <li><a href={enlaces.datosPersonales}>Tratamiento de Datos Personales</a></li>
+      </ul>
+      <ul class="footer-enlaces">
+        <li><a href={enlaces.cartaRestaurantes}>Carta de Restaurantes</a></li>
+      </ul>
+      <ul class="footer-enlaces">
+        <li><a href={enlaces.localesLima}>Locales en Lima</a></li>
+        <li><a href={enlaces.oficinas}>Oficinas</a></li>
+      </ul>
+
+      <!-- Fila 3: botones y redes -->
+      <a
+        href={enlaces.libroReclamaciones}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-boton footer-boton-libro"
+      >
+        <Image src={libroReclamaciones} alt="Libro de Reclamaciones" class="w-full h-auto" />
+      </a>
+      <a
+        href={enlaces.facturacion}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-boton footer-boton-facturacion"
+      >
+        <Image src={facturacion} alt="Facturación" class="w-full h-auto" />
+      </a>
+      <div class="footer-redes flex items-center">
+        <a href={enlaces.tiktok} target="_blank" rel="noopener noreferrer" class="footer-boton footer-red-tiktok">
+          <Image src={tiktok} alt="TikTok de Siete Sopas" class="w-full h-auto" />
+        </a>
+        <a href={enlaces.instagram} target="_blank" rel="noopener noreferrer" class="footer-boton footer-red-instagram">
+          <Image src={instagram} alt="Instagram de Siete Sopas" class="w-full h-auto" />
+        </a>
+      </div>
+    </div>
+
+    <p class="footer-derechos">Todos los derechos reservados por Lucha Partners</p>
+  </footer>
+</section>
+
+<style>
+  /* ===== Ajustes de Tiendas =====
+     Todo está en vw salvo el texto, así que se ve en la misma proporción en móvil y escritorio. */
+  #tiendas {
+    /* Cuánto se mete Tiendas por debajo de la madera del final de Sabor */
+    --tiendas-subir: 3vw;
+    /* Altura de la sección (el fondo mide 105.8vw) */
+    --tiendas-altura: 105.8vw;
+    /* Título: distancia desde el borde superior (el texto lo sigue) y ancho */
+    --tiendas-titulo-arriba: 18vw;
+    --tiendas-titulo-ancho: 24vw;
+    /* Separación entre el título y el texto */
+    --tiendas-texto-separacion: 8px;      /* móvil */
+    --tiendas-texto-separacion-md: 5vw;   /* escritorio (≥ 768px) */
+    /* Tamaño del texto (1rem = 16px) */
+    --tiendas-texto-tamano: 0.7rem;       /* móvil */
+    --tiendas-texto-tamano-md: 1.4rem;    /* escritorio (≥ 768px) */
+    /* Ancho máximo del texto */
+    --tiendas-texto-ancho: 100%;          /* móvil */
+    --tiendas-texto-ancho-md: 57vw;       /* escritorio (≥ 768px) */
+    /* Color del texto */
+    --tiendas-color: #f3ead8;
+    /* Imágenes de tiendas: posición (desde el borde superior), tamaño y corrimiento lateral.
+       El ancho es el de la tienda 1; las demás se escalan igual para que calcen. */
+    --tiendas-imagenes-arriba: 42.3vw;
+    --tiendas-imagenes-ancho: 86.5vw;
+    --tiendas-imagenes-mover-x: 0px;
+    /* Animación: cuánto se queda cada imagen y cuánto dura el desvanecido */
+    --tiendas-animacion-pausa: 2500ms;
+    --tiendas-animacion-transicion: 900ms;
+    /* Footer: dónde empieza (desde el borde superior) */
+    --tiendas-footer-arriba: 79vw;
+    /* Footer: dónde empieza cada columna, medido desde el borde izquierdo */
+    --footer-col-nosotros: 6.9vw;
+    --footer-col-servicios: 39.6vw;
+    --footer-col-contactanos: 66.3vw;
+    --footer-col-logo: 83.7vw;
+    /* Footer: tamaños de letra (con un mínimo para que se lean en pantallas chicas) */
+    --footer-titulo-tamano: max(11px, 1.2vw);
+    --footer-enlace-tamano: max(10px, 1.1vw);
+    --footer-derechos-tamano: max(9px, 0.9vw);
+    /* Footer: tamaño de los botones, íconos y logo */
+    --footer-libro-ancho: 22.2vw;
+    --footer-facturacion-ancho: 15.1vw;
+    --footer-tiktok-ancho: 2.75vw;
+    --footer-instagram-ancho: 2.4vw;
+    --footer-logo-ancho: 8vw;
+    /* Footer: separaciones verticales */
+    --footer-titulo-enlaces: 1.8vw;   /* entre título y enlaces */
+    --footer-enlaces-botones: 1.4vw;  /* entre enlaces y botones */
+    --footer-derechos-arriba: 7vw;    /* entre botones y "Todos los derechos…" */
+    /* Footer: cuánto crecen los botones al pasar el mouse */
+    --footer-boton-hover: 1.08;
+
+    height: var(--tiendas-altura);
+    margin-top: calc(-1 * var(--tiendas-subir));
+  }
+
+  .tiendas-contenido {
+    top: var(--tiendas-titulo-arriba);
+    padding: 0 24px;
+  }
+
+  .tiendas-titulo {
+    width: var(--tiendas-titulo-ancho);
+  }
+
+  .tiendas-texto {
+    width: 100%;
+    max-width: var(--tiendas-texto-ancho);
+    margin-top: var(--tiendas-texto-separacion);
+    color: var(--tiendas-color);
+    font-size: var(--tiendas-texto-tamano);
+    line-height: 1.9;
+  }
+
+  /* Caja con la altura de la tienda más alta (la 4: 489px de 1552) */
+  .tiendas-imagenes {
+    top: var(--tiendas-imagenes-arriba);
+    height: calc(var(--tiendas-imagenes-ancho) * 489 / 1552);
+  }
+
+  .tiendas-imagen {
+    width: calc(var(--tiendas-imagenes-ancho) * var(--ancho-relativo));
+    max-width: none;
+    left: calc(
+      50% + var(--tiendas-imagenes-mover-x) + var(--tiendas-imagenes-ancho) * var(--dx-relativo)
+    );
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity var(--tiendas-animacion-transicion) ease-in-out;
+  }
+
+  .tiendas-imagen.visible {
+    opacity: 1;
+  }
+
+  .tiendas-footer {
+    top: var(--tiendas-footer-arriba);
+    color: var(--tiendas-color);
+  }
+
+  /* Grilla de 4 columnas × 3 filas (títulos / enlaces / botones); el logo ocupa su columna */
+  .footer-grilla {
+    display: grid;
+    grid-template-columns:
+      calc(var(--footer-col-servicios) - var(--footer-col-nosotros))
+      calc(var(--footer-col-contactanos) - var(--footer-col-servicios))
+      calc(var(--footer-col-logo) - var(--footer-col-contactanos))
+      auto;
+    grid-template-rows: auto auto auto;
+    align-items: start;
+    padding-left: var(--footer-col-nosotros);
+  }
+
+  .footer-titulo {
+    font-size: var(--footer-titulo-tamano);
+    text-transform: uppercase;
+  }
+
+  .footer-enlaces {
+    margin-top: var(--footer-titulo-enlaces);
+    font-size: var(--footer-enlace-tamano);
+    line-height: 1.45;
+  }
+
+  .footer-enlaces a {
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+  }
+
+  .footer-enlaces a:hover,
+  .footer-enlaces a:focus-visible {
+    color: #fff;
+    text-decoration-color: currentColor;
+  }
+
+  .footer-logo {
+    grid-column: 4;
+    grid-row: 1 / span 3;
+    width: var(--footer-logo-ancho);
+    margin-top: -2vw;
+  }
+
+  .footer-boton {
+    display: block;
+    margin-top: var(--footer-enlaces-botones);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .footer-boton:hover,
+  .footer-boton:focus-visible {
+    transform: scale(var(--footer-boton-hover));
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+  }
+
+  .footer-boton:active {
+    transform: scale(0.97);
+  }
+
+  .footer-boton-libro {
+    width: var(--footer-libro-ancho);
+    margin-left: -0.4vw;
+  }
+
+  .footer-boton-facturacion {
+    width: var(--footer-facturacion-ancho);
+  }
+
+  .footer-redes {
+    gap: 1.3vw;
+    margin-top: var(--footer-enlaces-botones);
+  }
+
+  .footer-redes .footer-boton {
+    margin-top: 0;
+  }
+
+  .footer-red-tiktok {
+    width: var(--footer-tiktok-ancho);
+  }
+
+  .footer-red-instagram {
+    width: var(--footer-instagram-ancho);
+  }
+
+  .footer-derechos {
+    margin-top: var(--footer-derechos-arriba);
+    padding-left: calc(var(--footer-col-nosotros) - 0.4vw);
+    font-size: var(--footer-derechos-tamano);
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 768px) {
+    .tiendas-contenido {
+      padding: 0 48px;
+    }
+
+    .tiendas-texto {
+      max-width: var(--tiendas-texto-ancho-md);
+      margin-top: var(--tiendas-texto-separacion-md);
+      font-size: var(--tiendas-texto-tamano-md);
+    }
+  }
+</style>
+
+<script>
+  // Animación de las tiendas: cada imagen se desvanece mientras aparece la siguiente
+  // (1 → 2 → 3 → 4 → 1 …). Solo corre mientras la sección está en pantalla.
+  const seccion = document.querySelector<HTMLElement>("#tiendas");
+  const imagenes = seccion
+    ? [...seccion.querySelectorAll<HTMLElement>(".tiendas-imagen")]
+    : [];
+  const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (seccion && imagenes.length > 1 && !sinMovimiento) {
+    const leerMs = (nombre: string) =>
+      parseFloat(getComputedStyle(seccion).getPropertyValue(nombre)) || 0;
+    const pausa = leerMs("--tiendas-animacion-pausa");
+    const transicion = leerMs("--tiendas-animacion-transicion");
+
+    let actual = 0;
+    let temporizador: number | undefined;
+
+    const avanzar = () => {
+      imagenes[actual].classList.remove("visible");
+      actual = (actual + 1) % imagenes.length;
+      imagenes[actual].classList.add("visible");
+      temporizador = window.setTimeout(avanzar, pausa + transicion);
+    };
+
+    new IntersectionObserver(([entrada]) => {
+      if (entrada.isIntersecting && temporizador === undefined) {
+        temporizador = window.setTimeout(avanzar, pausa);
+      } else if (!entrada.isIntersecting && temporizador !== undefined) {
+        clearTimeout(temporizador);
+        temporizador = undefined;
+      }
+    }).observe(seccion);
+  }
+</script>
