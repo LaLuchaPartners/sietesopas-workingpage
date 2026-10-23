@@ -1,0 +1,99 @@
+---
+// Sección: Sopas1 (Sopas del Día)
+// Assets en src/assets/sopas/sopas1/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import fondo from "../../../../assets/sopas/sopas1/imagenes/fondo.mp4?url";
+import fondoMovil from "../../../../assets/sopas/sopas1/imagenes/fondo-movil.mp4?url";
+import titulo from "../../../../assets/sopas/sopas1/imagenes/titulo.webp";
+import sopas from "../../../../assets/sopas/sopas1/imagenes/sopas.webp";
+---
+
+<section id="sopas1" class="relative w-full overflow-hidden">
+  <!-- Video de fondo -->
+  <video
+    class="sopas1-video absolute inset-x-0 w-full object-cover"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  >
+    <source src={fondoMovil} type="video/mp4" media="(max-width: 767px)" />
+    <source src={fondo} type="video/mp4" />
+  </video>
+
+  <!-- Título -->
+  <h2 class="sopas1-titulo absolute z-10">
+    <Image src={titulo} alt="Sopas del Día" class="w-full h-auto" />
+  </h2>
+
+  <!-- Nombres de las sopas, encima de los platos del video -->
+  <Image
+    src={sopas}
+    alt="Lunes de Shambar, Martes de Caldo de Cabeza, Miércoles de Menestrón, Jueves de Patasca"
+    class="sopas1-nombres absolute z-10 h-auto pointer-events-none"
+  />
+</section>
+
+<style>
+  /* ===== Ajustes de Sopas1 ===== */
+  #sopas1 {
+    /* Altura de la sección (75vw muestra el video completo) */
+    --sopas1-altura: 75vw;            /* móvil */
+    --sopas1-altura-md: 75vw;         /* escritorio (≥ 768px) */
+    /* Título: distancia desde el borde superior (más grande = más abajo) y ancho */
+    --sopas1-titulo-arriba: 3vw;      /* móvil */
+    --sopas1-titulo-arriba-md: 3vw;   /* escritorio (≥ 768px) */
+    --sopas1-titulo-ancho: 31vw;      /* móvil */
+    --sopas1-titulo-ancho-md: 31vw;   /* escritorio (≥ 768px) */
+    /* Nombres de las sopas (Lunes, Martes, Miércoles, Jueves).
+       arriba: distancia desde el borde superior (más grande = más abajo)
+       ancho: tamaño de la imagen (más grande = nombres más grandes y más separados)
+       mover-x: corre la imagen a los lados (positivo = derecha, negativo = izquierda) */
+    --sopas1-nombres-arriba: 12vw;      /* móvil */
+    --sopas1-nombres-arriba-md: 11vw;   /* escritorio (≥ 768px) */
+    --sopas1-nombres-ancho: 59.5vw;     /* móvil */
+    --sopas1-nombres-ancho-md: 59.5vw;  /* escritorio (≥ 768px) */
+    --sopas1-nombres-mover-x: 0px;
+
+    height: var(--sopas1-altura);
+  }
+
+  /* El video trae franjas blancas de 4px arriba y abajo: se agranda un poco
+     y la sección (overflow-hidden) recorta ese sobrante */
+  .sopas1-video {
+    top: -0.3vw;
+    height: calc(100% + 0.6vw);
+  }
+
+  .sopas1-titulo {
+    top: var(--sopas1-titulo-arriba);
+    width: var(--sopas1-titulo-ancho);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .sopas1-nombres {
+    top: var(--sopas1-nombres-arriba);
+    width: var(--sopas1-nombres-ancho);
+    left: 50%;
+    transform: translateX(calc(-50% + var(--sopas1-nombres-mover-x)));
+  }
+
+  @media (min-width: 768px) {
+    #sopas1 {
+      height: var(--sopas1-altura-md);
+    }
+
+    .sopas1-titulo {
+      top: var(--sopas1-titulo-arriba-md);
+      width: var(--sopas1-titulo-ancho-md);
+    }
+
+    .sopas1-nombres {
+      top: var(--sopas1-nombres-arriba-md);
+      width: var(--sopas1-nombres-ancho-md);
+    }
+  }
+</style>
