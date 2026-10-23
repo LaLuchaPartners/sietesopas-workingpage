@@ -1,24 +1,24 @@
-
 ---
-import ComingSoon from '../components/ComingSoon.astro';
+import Layout from '../layouts/Layout.astro';
+import Giro from '../components/landing/giro/Giro.astro';
+import Esencia from '../components/landing/esencia/Esencia.astro';
+import Combi from '../components/landing/combi/Combi.astro';
+import Sopas from '../components/landing/sopas/Sopas.astro';
+import Carta from '../components/landing/carta/Carta.astro';
+import Servicio from '../components/landing/servicio/Servicio.astro';
+import Sabor from '../components/landing/sabor/Sabor.astro';
+import Tiendas from '../components/landing/tiendas/Tiendas.astro';
 ---
 
-<html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}logo.svg`} />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    
-    <title>Siete Sopas - Próximamente</title>
-    <meta name="description" content="Estamos preparando algo delicioso. Siete Sopas próximamente." />
-
-    <!-- Preload critical assets -->
-    <link rel="preload" href={`${import.meta.env.BASE_URL}fondo.webp`} as="image" />
-    <link rel="preload" href={`${import.meta.env.BASE_URL}proximamante.svg`} as="image" />
-    <link rel="preload" href={`${import.meta.env.BASE_URL}logo.svg`} as="image" />
-  </head>
-  <body>
-    <ComingSoon />
-  </body>
-</html>
+<Layout title="Siete Sopas">
+  <main>
+    <Giro />
+    <Esencia />
+    <Combi />
+    <Sopas />
+    <Carta />
+    <Servicio />
+    <Sabor />
+    <Tiendas />
+  </main>
+</Layout>
