@@ -1,0 +1,244 @@
+---
+// Sección: Sabor
+// Assets en src/assets/sabor/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import intermedio from "../../../assets/sabor/imagenes/intermedio.webp";
+import titulo from "../../../assets/sabor/imagenes/titulo.webp";
+import fondo1 from "../../../assets/sabor/imagenes/fondo-1.webp";
+import fondo2 from "../../../assets/sabor/imagenes/fondo-2.webp";
+import fondo3 from "../../../assets/sabor/imagenes/fondo-3.webp";
+import fondo4 from "../../../assets/sabor/imagenes/fondo-4.webp";
+import fondo5 from "../../../assets/sabor/imagenes/fondo-5.webp";
+import fondo6 from "../../../assets/sabor/imagenes/fondo-6.webp";
+import fondo7 from "../../../assets/sabor/imagenes/fondo-7.webp";
+
+// Fondos que se van mostrando después del 1, en orden (animación al final del archivo)
+const fondosAnimados = [fondo2, fondo3, fondo4, fondo5, fondo6, fondo7];
+---
+
+<section id="sabor" class="relative w-full overflow-hidden">
+  <!-- Fondos animados: el 1 queda siempre debajo (es el más alto) y los demás
+       aparecen encima uno tras otro con un desvanecido.
+       Todos se alinean por abajo: así la mesa y el bowl calzan entre fondos. -->
+  <div class="sabor-fondos absolute inset-x-0 bottom-0">
+    <Image
+      src={fondo1}
+      alt="Bowl de sopa sobre la mesa con los ingredientes cayendo"
+      class="absolute bottom-0 left-0 w-full h-auto"
+      widths={[800, 1728]}
+      sizes="100vw"
+    />
+    {
+      fondosAnimados.map((fondo) => (
+        <Image
+          src={fondo}
+          alt=""
+          aria-hidden="true"
+          class="sabor-fondo-animado absolute bottom-0 left-0 w-full h-auto"
+          widths={[800, 1728]}
+          sizes="100vw"
+        />
+      ))
+    }
+  </div>
+
+  <!-- Imagen intermedio: tapa la unión entre el final de Servicio y el fondo -->
+  <Image
+    src={intermedio}
+    alt=""
+    aria-hidden="true"
+    class="sabor-intermedio absolute left-0 w-full h-auto pointer-events-none"
+    widths={[800, 1728]}
+    sizes="100vw"
+  />
+
+  <!-- Segunda imagen intermedio (copia), con su propia posición y tamaño -->
+  <Image
+    src={intermedio}
+    alt=""
+    aria-hidden="true"
+    class="sabor-intermedio-2 absolute h-auto pointer-events-none"
+    widths={[800, 1728]}
+    sizes="100vw"
+  />
+
+  <!-- Título y texto -->
+  <div class="sabor-contenido absolute inset-x-0 z-10 flex flex-col items-center text-center">
+    <h2 class="sabor-titulo">
+      <Image src={titulo} alt="El Sabor de Casa" class="w-full h-auto" />
+    </h2>
+
+    <div class="sabor-texto flex flex-col gap-6">
+      <p>
+        Nuestros fogones nunca se apagan, porque el cariño no tiene horario.
+        Cuidamos cada receta como una herencia para que, en cada cucharada,
+        sientas el sabor de nuestra tierra. Aquí, los ingredientes más sencillos
+        se transforman en ese abrazo calientito que buscas al final del día.
+      </p>
+      <p>
+        En Siete Sopas, el aroma a hogar te avisa que, finalmente, llegaste a
+        casa.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Ajustes de Sabor =====
+     Todo está en vw salvo el texto, así que se ve en la misma proporción en móvil y escritorio. */
+  #sabor {
+    /* Cuánto empieza Sabor por encima del final de Servicio. El fondo de Sabor arranca
+       justo donde termina Servicio, y ahí se centra la imagen intermedio.
+       Más grande = el título y el texto quedan más arriba sobre Servicio. */
+    --sabor-fondo-arriba: 26vw;
+    /* Junta un poco más Sabor con Servicio para que no quede una línea negra entre los dos.
+       Si la línea sigue apareciendo, súbelo (ej. 2vw). */
+    --sabor-juntar: 1vw;
+    /* Mover la imagen intermedio respecto a esa unión (positivo = abajo, negativo = arriba) */
+    --sabor-intermedio-mover-y: -10px;
+    /* Opacidad de la imagen intermedio. Es casi negra, más oscura que los dos fondos:
+       con 1 se ve como una franja negra. 0 = no se ve, 1 = se ve completa. */
+    --sabor-intermedio-opacidad: 1;
+    /* Segunda imagen intermedio (copia de la primera, se mueve por separado).
+       mover-y: respecto a la unión con Servicio (positivo = abajo, negativo = arriba)
+       ancho: tamaño (100vw = todo el ancho; más grande = crece en ambas direcciones)
+       estirar-y: la estira solo de alto (1 = normal, 2 = el doble de alta)
+       opacidad: 0 = no se ve, 1 = se ve completa */
+    --sabor-intermedio2-mover-y: 60px;
+    --sabor-intermedio2-ancho: 100vw;
+    --sabor-intermedio2-estirar-y: 1;
+    --sabor-intermedio2-opacidad: 2;
+    /* Título: distancia desde el borde superior de Sabor (el texto lo sigue) y ancho */
+    --sabor-titulo-arriba: 4vw;
+    --sabor-titulo-ancho: 45vw;
+    /* Separación entre el título y el texto */
+    --sabor-texto-separacion: 8px;       /* móvil */
+    --sabor-texto-separacion-md: 6vw;    /* escritorio (≥ 768px) */
+    /* Tamaño del texto (1rem = 16px) */
+    --sabor-texto-tamano: 0.7rem;        /* móvil */
+    --sabor-texto-tamano-md: 1.4rem;     /* escritorio (≥ 768px) */
+    /* Ancho máximo del texto */
+    --sabor-texto-ancho: 100%;           /* móvil */
+    --sabor-texto-ancho-md: 66vw;        /* escritorio (≥ 768px) */
+    /* Color del texto */
+    --sabor-color: #f3ead8;
+    /* Animación de los fondos (1 → 2 → … → 7 → vuelve al 1).
+       pausa: cuánto se queda quieto cada fondo
+       transicion: cuánto dura el desvanecido entre uno y otro */
+    --sabor-animacion-pausa: 1800ms;
+    --sabor-animacion-transicion: 700ms;
+
+    /* El fondo 1 mide 84vw de alto. Su borde de abajo (la madera) se desvanece en los
+       últimos 1.4vw: se deja completo para que se pinte sobre el fondo de Tiendas */
+    height: calc(var(--sabor-fondo-arriba) + 84vw);
+    margin-top: calc(-1 * (var(--sabor-fondo-arriba) + var(--sabor-juntar)));
+    /* Sabor va encima de Tiendas: la madera del final tapa el borde de su fondo */
+    z-index: 1;
+  }
+
+  .sabor-fondos {
+    top: var(--sabor-fondo-arriba);
+  }
+
+  .sabor-fondo-animado {
+    opacity: 0;
+    transition: opacity var(--sabor-animacion-transicion) ease-in-out;
+  }
+
+  .sabor-fondo-animado.visible {
+    opacity: 1;
+  }
+
+  .sabor-intermedio {
+    top: calc(var(--sabor-fondo-arriba) + var(--sabor-intermedio-mover-y));
+    transform: translateY(-50%);
+    z-index: 5;
+    opacity: var(--sabor-intermedio-opacidad);
+  }
+
+  .sabor-intermedio-2 {
+    top: calc(var(--sabor-fondo-arriba) + var(--sabor-intermedio2-mover-y));
+    left: 50%;
+    width: var(--sabor-intermedio2-ancho);
+    max-width: none;
+    transform: translate(-50%, -50%) scaleY(var(--sabor-intermedio2-estirar-y));
+    z-index: 5;
+    opacity: var(--sabor-intermedio2-opacidad);
+  }
+
+  .sabor-contenido {
+    top: var(--sabor-titulo-arriba);
+    padding: 0 24px;
+  }
+
+  .sabor-titulo {
+    width: var(--sabor-titulo-ancho);
+  }
+
+  .sabor-texto {
+    width: 100%;
+    max-width: var(--sabor-texto-ancho);
+    margin-top: var(--sabor-texto-separacion);
+    color: var(--sabor-color);
+    font-size: var(--sabor-texto-tamano);
+    line-height: 1.9;
+  }
+
+  @media (min-width: 768px) {
+    .sabor-contenido {
+      padding: 0 48px;
+    }
+
+    .sabor-texto {
+      max-width: var(--sabor-texto-ancho-md);
+      margin-top: var(--sabor-texto-separacion-md);
+      font-size: var(--sabor-texto-tamano-md);
+    }
+  }
+</style>
+
+<script>
+  // Animación de los fondos de Sabor: el fondo 1 queda fijo debajo y los fondos
+  // 2 → 7 van apareciendo encima con un desvanecido; luego vuelve al 1 y se repite.
+  // Solo corre mientras la sección está en pantalla.
+  const seccion = document.querySelector<HTMLElement>("#sabor");
+  const capas = seccion
+    ? [...seccion.querySelectorAll<HTMLElement>(".sabor-fondo-animado")]
+    : [];
+  const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (seccion && capas.length && !sinMovimiento) {
+    const leerMs = (nombre: string) =>
+      parseFloat(getComputedStyle(seccion).getPropertyValue(nombre)) || 0;
+    const pausa = leerMs("--sabor-animacion-pausa");
+    const transicion = leerMs("--sabor-animacion-transicion");
+
+    // 0 = solo el fondo 1; 1..n = la capa n está visible
+    let paso = 0;
+    let temporizador: number | undefined;
+
+    const avanzar = () => {
+      if (paso < capas.length) {
+        // La capa nueva está encima de la anterior: aparece sobre ella
+        capas[paso].classList.add("visible");
+        const anterior = capas[paso - 1];
+        if (anterior) setTimeout(() => anterior.classList.remove("visible"), transicion);
+        paso++;
+      } else {
+        // Última capa: se desvanece y deja ver de nuevo el fondo 1
+        capas[capas.length - 1].classList.remove("visible");
+        paso = 0;
+      }
+      temporizador = window.setTimeout(avanzar, pausa + transicion);
+    };
+
+    new IntersectionObserver(([entrada]) => {
+      if (entrada.isIntersecting && temporizador === undefined) {
+        temporizador = window.setTimeout(avanzar, pausa);
+      } else if (!entrada.isIntersecting && temporizador !== undefined) {
+        clearTimeout(temporizador);
+        temporizador = undefined;
+      }
+    }).observe(seccion);
+  }
+</script>
