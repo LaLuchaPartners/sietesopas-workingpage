@@ -1,0 +1,165 @@
+---
+// Sección: Combi (incluye la primera parte de Sopas: comparten el mismo fondo)
+// Assets en src/assets/combi/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import fondo from "../../../assets/combi/imagenes/fondo.mp4?url";
+import fondoMovil from "../../../assets/combi/imagenes/fondo-movil.mp4?url";
+import intermedio from "../../../assets/combi/imagenes/intermedio.webp";
+import titulo from "../../../assets/combi/imagenes/titulo.webp";
+import sopas from "../../../assets/combi/imagenes/sopas.webp";
+---
+
+<section id="combi" class="relative w-full overflow-hidden">
+  <!-- Video de fondo (más ancho que la sección para esconder sus franjas blancas laterales) -->
+  <video
+    class="combi-video absolute top-0 h-full object-cover"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  >
+    <source src={fondoMovil} type="video/mp4" media="(max-width: 767px)" />
+    <source src={fondo} type="video/mp4" />
+  </video>
+
+  <!-- Imagen intermedio: al medio del fondo -->
+  <Image
+    src={intermedio}
+    alt=""
+    aria-hidden="true"
+    class="combi-intermedio absolute left-0 w-full h-auto pointer-events-none"
+    widths={[800, 1600, 2400, 3307]}
+    sizes="100vw"
+  />
+
+  <!-- Título y texto -->
+  <div class="combi-contenido absolute inset-x-0 z-10 flex flex-col items-center text-center">
+    <h2 class="combi-titulo">
+      <Image src={titulo} alt="Nuestras Sopas" class="w-full h-auto" />
+    </h2>
+
+    <p class="combi-texto">
+      En Siete Sopas, creemos que el alimento más poderoso es el cariño. Por
+      eso, en cada cucharada de nuestras sopas y caldos, encontrarás no solo
+      ingredientes seleccionados con manos bondadosas, sino también el eco de
+      nuestras tradiciones.
+    </p>
+  </div>
+
+  <!-- Nombres de las sopas, encima de los platos del video -->
+  <Image
+    src={sopas}
+    alt="Caldo de Gallina y Sopa Criolla"
+    class="combi-sopas absolute z-10 h-auto pointer-events-none"
+  />
+</section>
+
+<style>
+  /* ===== Ajustes de Combi ===== */
+  #combi {
+    /* Altura de la sección (75vw muestra el video completo).
+       En móvil necesita más alto para que entre el texto. */
+    --combi-altura: 150vw;        /* móvil */
+    --combi-altura-md: 75vw;      /* escritorio (≥ 768px) */
+    /* Posición vertical de la imagen intermedio dentro de la sección.
+       0% = arriba, 50% = al medio, 100% = abajo */
+    --combi-intermedio-posicion: 50%;
+    /* Posición del título, medida desde el borde superior de la sección.
+       Más grande = más abajo. px o vw. El texto se mueve con el título. */
+    --combi-titulo-arriba: 50vw;      /* móvil */
+    --combi-titulo-arriba-md: 30vw;   /* escritorio (≥ 768px) */
+    /* Ancho del título */
+    --combi-titulo-ancho: 75%;        /* móvil */
+    --combi-titulo-ancho-md: 480px;   /* escritorio (≥ 768px) */
+    /* Separación entre el título y el texto (px o vw) */
+    --combi-texto-separacion: 24px;     /* móvil */
+    --combi-texto-separacion-md: 40px;  /* escritorio (≥ 768px) */
+    /* Tamaño del texto (1rem = 16px) */
+    --combi-texto-tamano: 1.125rem;     /* móvil */
+    --combi-texto-tamano-md: 1.8rem;    /* escritorio (≥ 768px) */
+    /* Ancho máximo del texto (px o vw) */
+    --combi-texto-ancho: 100%;          /* móvil */
+    --combi-texto-ancho-md: 1200px;     /* escritorio (≥ 768px) */
+    /* Color del texto */
+    --combi-color: #7a5230;
+    /* Nombres de las sopas (Caldo de Gallina / Sopa Criolla).
+       arriba: distancia desde el borde superior (más grande = más abajo)
+       ancho: tamaño de la imagen (más grande = nombres más grandes y más separados)
+       mover-x: corre la imagen a los lados (positivo = derecha, negativo = izquierda) */
+    --combi-sopas-arriba: 87vw;       /* móvil */
+    --combi-sopas-arriba-md: 43.5vw;  /* escritorio (≥ 768px) */
+    --combi-sopas-ancho: 95vw;        /* móvil */
+    --combi-sopas-ancho-md: 47.5vw;   /* escritorio (≥ 768px) */
+    --combi-sopas-mover-x: 0px;
+
+    height: var(--combi-altura);
+  }
+
+  /* El video mide 2224px de ancho pero solo 1784px son dibujo (el resto son franjas
+     blancas a los lados): se agranda y centra para que esas franjas queden fuera */
+  .combi-video {
+    /* Tailwind limita los videos a max-width: 100%; aquí debe poder ser más ancho */
+    max-width: none;
+    width: calc(100% * 2224 / 1784);
+    left: calc(-100% * 220 / 1784);
+  }
+
+  .combi-intermedio {
+    top: var(--combi-intermedio-posicion);
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+
+  .combi-contenido {
+    top: var(--combi-titulo-arriba);
+    padding: 0 24px;
+  }
+
+  .combi-sopas {
+    top: var(--combi-sopas-arriba);
+    width: var(--combi-sopas-ancho);
+    left: 50%;
+    transform: translateX(calc(-50% + var(--combi-sopas-mover-x)));
+  }
+
+  .combi-titulo {
+    width: var(--combi-titulo-ancho);
+  }
+
+  .combi-texto {
+    width: 100%;
+    max-width: var(--combi-texto-ancho);
+    margin-top: var(--combi-texto-separacion);
+    color: var(--combi-color);
+    font-size: var(--combi-texto-tamano);
+    line-height: 1.7;
+  }
+
+  @media (min-width: 768px) {
+    #combi {
+      height: var(--combi-altura-md);
+    }
+
+    .combi-contenido {
+      top: var(--combi-titulo-arriba-md);
+      padding: 0 48px;
+    }
+
+    .combi-sopas {
+      top: var(--combi-sopas-arriba-md);
+      width: var(--combi-sopas-ancho-md);
+    }
+
+    .combi-titulo {
+      width: var(--combi-titulo-ancho-md);
+    }
+
+    .combi-texto {
+      max-width: var(--combi-texto-ancho-md);
+      margin-top: var(--combi-texto-separacion-md);
+      font-size: var(--combi-texto-tamano-md);
+    }
+  }
+</style>
