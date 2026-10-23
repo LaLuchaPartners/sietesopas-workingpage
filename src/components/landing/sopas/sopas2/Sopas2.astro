@@ -1,0 +1,90 @@
+---
+// Sección: Sopas2 (Viernes, Sábado y Domingo)
+// Assets en src/assets/sopas/sopas2/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import fondo from "../../../../assets/sopas/sopas2/imagenes/fondo.mp4?url";
+import fondoMovil from "../../../../assets/sopas/sopas2/imagenes/fondo-movil.mp4?url";
+import intermedio from "../../../../assets/sopas/sopas2/imagenes/intermedio.webp";
+import nombres from "../../../../assets/sopas/sopas2/imagenes/nombres.webp";
+---
+
+<section id="sopas2" class="relative w-full">
+  <!-- Video de fondo, recortado arriba y abajo -->
+  <div class="absolute inset-0 overflow-hidden">
+    <video
+      class="sopas2-video absolute inset-x-0 w-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    >
+      <source src={fondoMovil} type="video/mp4" media="(max-width: 767px)" />
+      <source src={fondo} type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- Imagen intermedio: tapa la unión con Sopas1 -->
+  <Image
+    src={intermedio}
+    alt=""
+    aria-hidden="true"
+    class="sopas2-intermedio absolute left-0 w-full h-auto pointer-events-none"
+    widths={[800, 1600, 2400, 3307]}
+    sizes="100vw"
+  />
+
+  <!-- Nombres de las sopas, encima de los platos del video -->
+  <Image
+    src={nombres}
+    alt="Viernes de Hualpa Chupe, Sábado de Caldo de Cordero, Domingo de Sancochado"
+    class="sopas2-nombres absolute z-10 h-auto pointer-events-none"
+  />
+</section>
+
+<style>
+  /* ===== Ajustes de Sopas2 =====
+     Todo está en vw (proporcional al ancho), así que se ve igual en móvil y escritorio. */
+  #sopas2 {
+    /* Cuánto se monta Sopas2 sobre el final de Sopas1 (más grande = más arriba) */
+    --sopas2-subir: 9.2vw;
+    /* Cuánto se recorta el video ARRIBA (más grande = el video sube y se esconde más) */
+    --sopas2-recorte-arriba: 9.2vw;
+    /* Altura visible de la sección. Más chico = se recorta más el video ABAJO
+       (el video completo mide 75vw; abajo trae una franja rosada) */
+    --sopas2-altura: 64vw;
+    /* Posición de la imagen intermedio respecto al borde superior de Sopas2
+       (0px = centrada en la unión; positivo = más abajo, negativo = más arriba) */
+    --sopas2-intermedio-mover-y: 20px;
+    /* Nombres de las sopas (Viernes, Sábado, Domingo).
+       arriba: distancia desde el borde superior (más grande = más abajo; puede ser negativo)
+       ancho: tamaño de la imagen (más grande = nombres más grandes y más separados)
+       mover-x: corre la imagen a los lados (positivo = derecha, negativo = izquierda) */
+    --sopas2-nombres-arriba: -2.9vw;
+    --sopas2-nombres-ancho: 63vw;
+    --sopas2-nombres-mover-x: 1.4vw;
+
+    height: var(--sopas2-altura);
+    margin-top: calc(-1 * var(--sopas2-subir));
+  }
+
+  .sopas2-video {
+    max-width: none;
+    height: 75vw;
+    top: calc(-1 * var(--sopas2-recorte-arriba));
+  }
+
+  .sopas2-intermedio {
+    top: var(--sopas2-intermedio-mover-y);
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+
+  .sopas2-nombres {
+    top: var(--sopas2-nombres-arriba);
+    width: var(--sopas2-nombres-ancho);
+    left: 50%;
+    transform: translateX(calc(-50% + var(--sopas2-nombres-mover-x)));
+  }
+</style>
