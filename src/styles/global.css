@@ -6,11 +6,21 @@
 
 @layer base {
   body {
-    @apply m-0 p-0 overflow-hidden bg-black;
-    font-family: 'CustomFont', system-ui, -apple-system, sans-serif;
+    @apply m-0 p-0 overflow-x-hidden bg-black;
+    font-family: 'Glass Antiqua', serif;
   }
 }
 
+/* Fuente principal de la web */
+@font-face {
+  font-family: 'Glass Antiqua';
+  src: url('../assets/GlassAntiqua-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Fuente de la antigua página "Próximamente" */
 @font-face {
   font-family: 'CustomFont';
   src: url('../assets/fuente.TTF') format('truetype');
