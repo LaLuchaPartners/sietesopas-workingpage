@@ -1,0 +1,119 @@
+---
+// Sección: Carta1
+// Assets en src/assets/carta/carta1/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import intermedio from "../../../../assets/carta/carta1/imagenes/intermedio.webp";
+import fondo from "../../../../assets/carta/carta1/imagenes/fondo.webp";
+import titulo from "../../../../assets/carta/carta1/imagenes/titulo.webp";
+---
+
+<section id="carta1" class="relative w-full">
+  <!-- 1. Imagen intermedio: tapa la unión con Sopas2 (va debajo del fondo) -->
+  <Image
+    src={intermedio}
+    alt=""
+    aria-hidden="true"
+    class="carta1-intermedio absolute left-0 w-full h-auto pointer-events-none"
+    widths={[800, 1728]}
+    sizes="100vw"
+  />
+
+  <!-- 2. Fondo de la carta (incluye la gallina y el pollito) -->
+  <Image
+    src={fondo}
+    alt=""
+    aria-hidden="true"
+    class="carta1-fondo absolute top-0 left-0 w-full h-auto pointer-events-none"
+    widths={[800, 1728]}
+    sizes="100vw"
+    loading="lazy"
+  />
+
+  <!-- 3. Título y texto -->
+  <div class="carta1-contenido absolute inset-x-0 z-10 flex flex-col items-center text-center">
+    <h2 class="carta1-titulo">
+      <Image src={titulo} alt="Carta" class="w-full h-auto" />
+    </h2>
+
+    <p class="carta1-texto">
+      Siéntate, respira profundo y prepárate para disfrutar. Estás exactamente
+      en el lugar indicado.
+    </p>
+  </div>
+</section>
+
+<style>
+  /* ===== Ajustes de Carta1 ===== */
+  #carta1 {
+    /* Cuánto se monta Carta1 sobre el final de Sopas2 (más grande = más arriba) */
+    --carta1-subir: 0px;
+    /* Altura de la sección. El fondo mide 52vw; más chico = se recorta abajo */
+    --carta1-altura: 52vw;
+    /* Posición de la imagen intermedio respecto al borde superior de Carta1
+       (0px = centrada en la unión; positivo = más abajo, negativo = más arriba) */
+    --carta1-intermedio-mover-y: 100px;
+    /* Título: distancia desde el borde superior (más grande = más abajo).
+       El texto se mueve con el título. */
+    --carta1-titulo-arriba: 0vw;        /* móvil */
+    --carta1-titulo-arriba-md: 0vw;     /* escritorio (≥ 768px) */
+    /* Ancho del título */
+    --carta1-titulo-ancho: 30vw;        /* móvil */
+    --carta1-titulo-ancho-md: 20vw;     /* escritorio (≥ 768px) */
+    /* Separación entre el título y el texto */
+    --carta1-texto-separacion: 8px;      /* móvil */
+    --carta1-texto-separacion-md: 2vw;   /* escritorio (≥ 768px) */
+    /* Tamaño del texto (1rem = 16px) */
+    --carta1-texto-tamano: 0.875rem;     /* móvil */
+    --carta1-texto-tamano-md: 1.8rem;    /* escritorio (≥ 768px) */
+    /* Ancho máximo del texto */
+    --carta1-texto-ancho: 100%;          /* móvil */
+    --carta1-texto-ancho-md: 1200px;     /* escritorio (≥ 768px) */
+    /* Color del texto */
+    --carta1-color: #7a5230;
+
+    height: var(--carta1-altura);
+    margin-top: calc(-1 * var(--carta1-subir));
+    /* Carta1 va encima de Carta2: el final del fondo se desvanece y deja ver su video */
+    z-index: 1;
+  }
+
+  .carta1-intermedio {
+    top: var(--carta1-intermedio-mover-y);
+    transform: translateY(-50%);
+  }
+
+  .carta1-contenido {
+    top: var(--carta1-titulo-arriba);
+    padding: 0 24px;
+  }
+
+  .carta1-titulo {
+    width: var(--carta1-titulo-ancho);
+  }
+
+  .carta1-texto {
+    width: 100%;
+    max-width: var(--carta1-texto-ancho);
+    margin-top: var(--carta1-texto-separacion);
+    color: var(--carta1-color);
+    font-size: var(--carta1-texto-tamano);
+    line-height: 1.7;
+  }
+
+  @media (min-width: 768px) {
+    .carta1-contenido {
+      top: var(--carta1-titulo-arriba-md);
+      padding: 0 48px;
+    }
+
+    .carta1-titulo {
+      width: var(--carta1-titulo-ancho-md);
+    }
+
+    .carta1-texto {
+      max-width: var(--carta1-texto-ancho-md);
+      margin-top: var(--carta1-texto-separacion-md);
+      font-size: var(--carta1-texto-tamano-md);
+    }
+  }
+</style>
