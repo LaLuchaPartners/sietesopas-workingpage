@@ -1,0 +1,154 @@
+---
+// Sección: Servicio
+// Assets en src/assets/servicio/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import fondo from "../../../assets/servicio/imagenes/fondo.mp4?url";
+import fondoMovil from "../../../assets/servicio/imagenes/fondo-movil.mp4?url";
+import intermedio from "../../../assets/servicio/imagenes/intermedio.webp";
+import titulo from "../../../assets/servicio/imagenes/titulo.webp";
+import fotos from "../../../assets/servicio/imagenes/fotos.webp";
+---
+
+<section id="servicio" class="relative w-full">
+  <!-- Video de fondo (cielo nocturno con los marcos) -->
+  <div class="absolute inset-0 overflow-hidden">
+    <video
+      class="servicio-video absolute inset-x-0 top-0 w-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    >
+      <source src={fondoMovil} type="video/mp4" media="(max-width: 767px)" />
+      <source src={fondo} type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- Imagen intermedio (nubes): tapa la unión con Carta2 -->
+  <Image
+    src={intermedio}
+    alt=""
+    aria-hidden="true"
+    class="servicio-intermedio absolute left-0 w-full h-auto pointer-events-none"
+    widths={[800, 1600, 2400, 3307]}
+    sizes="100vw"
+  />
+
+  <!-- Título y texto -->
+  <div class="servicio-contenido absolute inset-x-0 z-10 flex flex-col items-center text-center">
+    <h2 class="servicio-titulo">
+      <Image src={titulo} alt="Servicio" class="w-full h-auto" />
+    </h2>
+
+    <p class="servicio-texto">
+      En Siete Sopas, el servicio no es solo una atención, es un acto de
+      cuidado que comienza mucho antes de que la cuchara toque el plato. Es el
+      arte de recibirte con la misma alegría con la que se espera a un hijo que
+      vuelve a casa después de un largo viaje. Al cruzar nuestro umbral, el
+      murmullo de las conversaciones se mezcla con el aroma del pan recién
+      salido del horno de leña, ese compañero fiel que llega a tu mesa como un
+      regalo de bienvenida.
+    </p>
+  </div>
+
+  <!-- Fotos: una sola imagen ya ordenada para calzar en los marcos del video -->
+  <Image
+    src={fotos}
+    alt="Nuestro equipo atendiendo en Siete Sopas"
+    class="servicio-fotos absolute z-[1] h-auto pointer-events-none"
+    widths={[800, 1278]}
+    sizes="78vw"
+  />
+</section>
+
+<style>
+  /* ===== Ajustes de Servicio ===== */
+  #servicio {
+    /* Cuánto se monta Servicio sobre el final de Carta2 (más grande = más arriba) */
+    --servicio-subir: 1vw;
+    /* Altura de la sección (el video completo mide 225vw; más chico = se recorta abajo) */
+    --servicio-altura: 225vw;
+    /* Posición de las nubes respecto al borde superior de Servicio
+       (0px = centradas en la unión; positivo = más abajo, negativo = más arriba) */
+    --servicio-intermedio-mover-y: -5vw;
+    /* Título: distancia desde el borde superior (el texto se mueve con él) y ancho */
+    --servicio-titulo-arriba: 17.5vw;     /* móvil */
+    --servicio-titulo-arriba-md: 17.5vw;  /* escritorio (≥ 768px) */
+    --servicio-titulo-ancho: 30vw;        /* móvil */
+    --servicio-titulo-ancho-md: 23vw;     /* escritorio (≥ 768px) */
+    /* Separación entre el título y el texto */
+    --servicio-texto-separacion: 8px;      /* móvil */
+    --servicio-texto-separacion-md: 4vw;   /* escritorio (≥ 768px) */
+    /* Tamaño del texto (1rem = 16px) */
+    --servicio-texto-tamano: 0.7rem;       /* móvil */
+    --servicio-texto-tamano-md: 1.4rem;    /* escritorio (≥ 768px) */
+    /* Ancho máximo del texto */
+    --servicio-texto-ancho: 100%;          /* móvil */
+    --servicio-texto-ancho-md: 66vw;       /* escritorio (≥ 768px) */
+    /* Color del texto */
+    --servicio-color: #f3ead8;
+    /* Fotos de los marcos. Están calibradas para que la foto redonda calce en su
+       marco; si mueves una, se mueven todas juntas. */
+    --servicio-fotos-arriba: 44vw;
+    --servicio-fotos-izquierda: 10.75vw;
+    --servicio-fotos-ancho: 77.3vw;
+
+    height: var(--servicio-altura);
+    margin-top: calc(-1 * var(--servicio-subir));
+  }
+
+  /* Video 1820×4096 → a todo el ancho mide 225vw de alto */
+  .servicio-video {
+    max-width: none;
+    height: 225vw;
+  }
+
+  .servicio-intermedio {
+    top: var(--servicio-intermedio-mover-y);
+    transform: translateY(-50%);
+    z-index: 5;
+  }
+
+  .servicio-contenido {
+    top: var(--servicio-titulo-arriba);
+    padding: 0 24px;
+  }
+
+  .servicio-titulo {
+    width: var(--servicio-titulo-ancho);
+  }
+
+  .servicio-texto {
+    width: 100%;
+    max-width: var(--servicio-texto-ancho);
+    margin-top: var(--servicio-texto-separacion);
+    color: var(--servicio-color);
+    font-size: var(--servicio-texto-tamano);
+    line-height: 1.9;
+  }
+
+  .servicio-fotos {
+    top: var(--servicio-fotos-arriba);
+    left: var(--servicio-fotos-izquierda);
+    width: var(--servicio-fotos-ancho);
+  }
+
+  @media (min-width: 768px) {
+    .servicio-contenido {
+      top: var(--servicio-titulo-arriba-md);
+      padding: 0 48px;
+    }
+
+    .servicio-titulo {
+      width: var(--servicio-titulo-ancho-md);
+    }
+
+    .servicio-texto {
+      max-width: var(--servicio-texto-ancho-md);
+      margin-top: var(--servicio-texto-separacion-md);
+      font-size: var(--servicio-texto-tamano-md);
+    }
+  }
+</style>
