@@ -1,0 +1,186 @@
+---
+// Sección: Esencia
+// Assets en src/assets/esencia/ (imagenes, logos, animaciones)
+import { Image } from "astro:assets";
+import fondo from "../../../assets/esencia/imagenes/fondo.mp4?url";
+import fondoMovil from "../../../assets/esencia/imagenes/fondo-movil.mp4?url";
+import intermedio from "../../../assets/esencia/imagenes/intermedio.webp";
+import titulo from "../../../assets/esencia/imagenes/titulo.webp";
+import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
+---
+
+<section id="esencia" class="relative w-full">
+  <!-- Video de fondo -->
+  <video
+    class="esencia-video absolute inset-x-0 top-0 w-full object-cover"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-hidden="true"
+  >
+    <source src={fondoMovil} type="video/mp4" media="(max-width: 767px)" />
+    <source src={fondo} type="video/mp4" />
+  </video>
+
+  <!-- Imagen de transición: se superpone al final de Giro -->
+  <Image
+    src={intermedio}
+    alt=""
+    aria-hidden="true"
+    class="esencia-intermedio absolute left-0 w-full h-auto pointer-events-none"
+    widths={[800, 1600, 2400, 3307]}
+    sizes="100vw"
+  />
+
+  <!-- Contenido -->
+  <div class="esencia-contenido relative z-10 flex flex-col items-center text-center">
+    <h2 class="w-[75%] max-w-[560px]">
+      <Image src={titulo} alt="Nuestra Esencia" class="w-full h-auto" />
+    </h2>
+
+    <div class="esencia-bloque-1 relative w-full">
+      <!-- Texto 1 -->
+      <p class="esencia-texto esencia-texto-1">
+        Imagínate un rincón donde el tiempo se detiene, el vapor danza
+        suavemente sobre las ollas y el aroma del orégano fresco te da un
+        abrazo de bienvenida. Esa es la esencia de Siete Sopas, un tributo al
+        corazón de cada hogar peruano.
+      </p>
+      <Image
+        src={cubiertos}
+        alt=""
+        aria-hidden="true"
+        class="absolute -right-4 -top-4 md:-right-20 w-[36px] md:w-[56px] h-auto"
+      />
+    </div>
+  </div>
+
+  <!-- Texto 2: posición independiente (no lo mueve el título ni el texto 1) -->
+  <div class="esencia-contenido-2 absolute inset-x-0 z-10 flex justify-center text-center">
+    <div class="esencia-bloque-2 w-full flex flex-col gap-6">
+      <p class="esencia-texto esencia-texto-1">
+        Nuestra historia se cocina a fuego lento. Nacimos para compartir la
+        alegría de un buen caldo, de esos que te abrazan el alma y te devuelven
+        la vida. Cada receta es un viaje por el Perú que nos une como familia
+        en una mesa donde siempre hay un lugar para ti.
+      </p>
+      <p class="esencia-texto esencia-texto-1">
+        ¡En Siete Sopas te esperamos con las puertas abiertas y el pan
+        calientito!
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== Ajustes de Esencia ===== */
+  #esencia {
+    /* Altura de la sección (el video es 4:3 → 75vw lo muestra completo).
+       En móvil necesita más alto para que entren los textos. */
+    --esencia-altura: 190vw;      /* móvil */
+    --esencia-altura-md: 75vw;    /* escritorio (≥ 768px) */
+    /* Cuánto sube la imagen "intermedio" sobre el final de Giro.
+       Más grande = más arriba. Puede ser px o vw (ej. 120px, 15vw) */
+    --intermedio-subir: 20vw;
+    /* Posición del SEGUNDO texto, medida desde el borde superior de la sección.
+       Más grande = más abajo. Es independiente del título y del texto 1. px o vw. */
+    --texto2-arriba: 130vw;       /* móvil */
+    --texto2-arriba-md: 60vw;     /* escritorio (≥ 768px) */
+    /* Color del texto */
+    --esencia-color: #7a5230;
+    /* Distancia del título al borde superior de la sección.
+       Más chico = título más arriba. Acepta negativos para subirlo
+       sobre el intermedio (ej. -40px). px o vw. */
+    --titulo-arriba: 14vw;    /* móvil */
+    --titulo-arriba-md: -3vw;  /* escritorio (≥ 768px) */
+    /* Tamaño de los textos (1rem = 16px). Aplica al párrafo de arriba y a los de abajo */
+    --texto1-tamano: 1.125rem;    /* móvil */
+    --texto1-tamano-md: 1.8rem;   /* escritorio (≥ 768px) */
+    /* Ancho máximo de los párrafos, arriba y abajo (px o vw, ej. 1200px, 85vw) */
+    --texto1-ancho: 100%;         /* móvil */
+    --texto1-ancho-md: 1200px;    /* escritorio (≥ 768px) */
+    /* Separación entre el título y el PRIMER texto (px o vw) */
+    --texto1-separacion: 32px;    /* móvil */
+    --texto1-separacion-md: 72px; /* escritorio (≥ 768px) */
+
+    height: var(--esencia-altura);
+    /* Evita que el margen del contenido "se escape" y separe la sección de Giro */
+    display: flow-root;
+  }
+
+  /* El video trae una franja blanca de 4px abajo: se alarga un poco hacia abajo
+     y Combi (que va encima) tapa ese sobrante */
+  .esencia-video {
+    height: calc(100% + 0.6vw);
+  }
+
+  .esencia-intermedio {
+    top: calc(-1 * var(--intermedio-subir));
+    z-index: 5;
+  }
+
+  .esencia-contenido {
+    padding: 0 24px;
+    margin-top: var(--titulo-arriba);
+  }
+
+  .esencia-contenido-2 {
+    padding: 0 24px;
+    top: var(--texto2-arriba);
+  }
+
+  .esencia-texto {
+    color: var(--esencia-color);
+    font-size: 0.875rem;
+    line-height: 2;
+  }
+
+  .esencia-bloque-1 {
+    max-width: var(--texto1-ancho);
+    margin-top: var(--texto1-separacion);
+  }
+
+  .esencia-bloque-2 {
+    max-width: var(--texto1-ancho);
+  }
+
+  .esencia-texto-1 {
+    font-size: var(--texto1-tamano);
+    line-height: 1.7;
+  }
+
+  @media (min-width: 768px) {
+    #esencia {
+      height: var(--esencia-altura-md);
+    }
+
+    .esencia-contenido {
+      padding: 0 48px;
+      margin-top: var(--titulo-arriba-md);
+    }
+
+    .esencia-contenido-2 {
+      padding: 0 48px;
+      top: var(--texto2-arriba-md);
+    }
+
+    .esencia-texto {
+      font-size: 1rem;
+    }
+
+    .esencia-bloque-1 {
+      max-width: var(--texto1-ancho-md);
+      margin-top: var(--texto1-separacion-md);
+    }
+
+    .esencia-bloque-2 {
+      max-width: var(--texto1-ancho-md);
+    }
+
+    .esencia-texto-1 {
+      font-size: var(--texto1-tamano-md);
+    }
+  }
+</style>
