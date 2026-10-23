@@ -208,8 +208,13 @@ const fondosAnimados = [fondo2, fondo3, fondo4, fondo5, fondo6, fondo7];
   const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (seccion && capas.length && !sinMovimiento) {
-    const leerMs = (nombre: string) =>
-      parseFloat(getComputedStyle(seccion).getPropertyValue(nombre)) || 0;
+    // Lee un tiempo del CSS en milisegundos. Respeta la unidad: al compilar,
+    // el CSS se minifica y "1800ms" pasa a "1.8s".
+    const leerMs = (nombre: string) => {
+      const valor = getComputedStyle(seccion).getPropertyValue(nombre).trim();
+      const numero = parseFloat(valor) || 0;
+      return valor.endsWith("ms") ? numero : numero * 1000;
+    };
     const pausa = leerMs("--sabor-animacion-pausa");
     const transicion = leerMs("--sabor-animacion-transicion");
 
