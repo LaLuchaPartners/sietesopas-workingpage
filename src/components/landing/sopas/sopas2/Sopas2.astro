@@ -45,37 +45,60 @@ import nombres from "../../../../assets/sopas/sopas2/imagenes/nombres.webp";
 
 <style>
   /* ===== Ajustes de Sopas2 =====
-     Todo está en vw (proporcional al ancho), así que se ve igual en móvil y escritorio. */
+     Todo está en vw (proporcional al ancho). Móvil = el mismo armado de escritorio
+     ampliado 1.65 veces: cada valor de móvil es el de escritorio × 1.65. */
   #sopas2 {
     /* Cuánto se monta Sopas2 sobre el final de Sopas1 (más grande = más arriba) */
-    --sopas2-subir: 9.2vw;
+    --sopas2-subir: 15.18vw;              /* móvil */
+    --sopas2-subir-md: 9.2vw;             /* escritorio (≥ 768px) */
     /* Cuánto se recorta el video ARRIBA (más grande = el video sube y se esconde más) */
-    --sopas2-recorte-arriba: 9.2vw;
+    --sopas2-recorte-arriba: 15.18vw;     /* móvil */
+    --sopas2-recorte-arriba-md: 9.2vw;    /* escritorio (≥ 768px) */
     /* Altura visible de la sección. Más chico = se recorta más el video ABAJO
        (el video completo mide 75vw; abajo trae una franja rosada) */
-    --sopas2-altura: 64vw;
+    --sopas2-altura: 105.6vw;             /* móvil */
+    --sopas2-altura-md: 64vw;             /* escritorio (≥ 768px) */
+    /* Ancho del video y de la imagen intermedio (100vw = ancho de la pantalla) y
+       cuánto se corren a la izquierda para quedar centrados */
+    --sopas2-video-ancho: 165vw;          /* móvil */
+    --sopas2-video-ancho-md: 100vw;       /* escritorio (≥ 768px) */
+    --sopas2-video-izquierda: -32.5vw;    /* móvil */
+    --sopas2-video-izquierda-md: 0vw;     /* escritorio (≥ 768px) */
     /* Posición de la imagen intermedio respecto al borde superior de Sopas2
        (0px = centrada en la unión; positivo = más abajo, negativo = más arriba) */
-    --sopas2-intermedio-mover-y: 20px;
+    --sopas2-intermedio-mover-y: 2.3vw;   /* móvil */
+    --sopas2-intermedio-mover-y-md: 20px; /* escritorio (≥ 768px) */
     /* Nombres de las sopas (Viernes, Sábado, Domingo).
        arriba: distancia desde el borde superior (más grande = más abajo; puede ser negativo)
        ancho: tamaño de la imagen (más grande = nombres más grandes y más separados)
        mover-x: corre la imagen a los lados (positivo = derecha, negativo = izquierda) */
-    --sopas2-nombres-arriba: -2.9vw;
-    --sopas2-nombres-ancho: 63vw;
-    --sopas2-nombres-mover-x: 1.4vw;
+    --sopas2-nombres-arriba: -4.79vw;     /* móvil */
+    --sopas2-nombres-arriba-md: -2.9vw;   /* escritorio (≥ 768px) */
+    --sopas2-nombres-ancho: 103.95vw;     /* móvil */
+    --sopas2-nombres-ancho-md: 63vw;      /* escritorio (≥ 768px) */
+    --sopas2-nombres-mover-x: 2.31vw;     /* móvil */
+    --sopas2-nombres-mover-x-md: 1.4vw;   /* escritorio (≥ 768px) */
 
     height: var(--sopas2-altura);
     margin-top: calc(-1 * var(--sopas2-subir));
+    /* En móvil la imagen intermedio es más ancha que la pantalla: se recorta a los
+       costados (sin esto se podría hacer scroll hacia el lado) */
+    overflow-x: clip;
   }
 
   .sopas2-video {
     max-width: none;
-    height: 75vw;
+    right: auto;
+    left: var(--sopas2-video-izquierda);
+    width: var(--sopas2-video-ancho);
+    height: calc(var(--sopas2-video-ancho) * 0.75);
     top: calc(-1 * var(--sopas2-recorte-arriba));
   }
 
   .sopas2-intermedio {
+    max-width: none;
+    left: var(--sopas2-video-izquierda);
+    width: var(--sopas2-video-ancho);
     top: var(--sopas2-intermedio-mover-y);
     transform: translateY(-50%);
     z-index: 5;
@@ -86,5 +109,19 @@ import nombres from "../../../../assets/sopas/sopas2/imagenes/nombres.webp";
     width: var(--sopas2-nombres-ancho);
     left: 50%;
     transform: translateX(calc(-50% + var(--sopas2-nombres-mover-x)));
+  }
+
+  @media (min-width: 768px) {
+    #sopas2 {
+      --sopas2-subir: var(--sopas2-subir-md);
+      --sopas2-recorte-arriba: var(--sopas2-recorte-arriba-md);
+      --sopas2-altura: var(--sopas2-altura-md);
+      --sopas2-video-ancho: var(--sopas2-video-ancho-md);
+      --sopas2-video-izquierda: var(--sopas2-video-izquierda-md);
+      --sopas2-intermedio-mover-y: var(--sopas2-intermedio-mover-y-md);
+      --sopas2-nombres-arriba: var(--sopas2-nombres-arriba-md);
+      --sopas2-nombres-ancho: var(--sopas2-nombres-ancho-md);
+      --sopas2-nombres-mover-x: var(--sopas2-nombres-mover-x-md);
+    }
   }
 </style>

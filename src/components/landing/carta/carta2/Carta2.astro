@@ -34,16 +34,29 @@ import botonVer from "../../../../assets/carta/carta2/imagenes/boton-ver.webp";
 
 <style>
   /* ===== Ajustes de Carta2 =====
-     Todo está en vw (proporcional al ancho), así que se ve igual en móvil y escritorio. */
+     Todo está en vw (proporcional al ancho). Móvil: el video se amplía 1.553 veces
+     para que la carta llene el ancho, como en el prototipo. */
   #carta2 {
     /* Cuánto se mete Carta2 por debajo de Carta1 (más grande = más arriba).
        El final de Carta1 se desvanece y deja ver este video. */
-    --carta2-subir: 29.5vw;
-    /* Altura de la sección (75vw = video completo; más chico = se recorta abajo) */
-    --carta2-altura: 75vw;
-    /* Botón "Ver": distancia desde el borde superior y tamaño */
-    --carta2-boton-arriba: 8.8vw;
-    --carta2-boton-ancho: 30vw;
+    --carta2-subir: 51.5vw;            /* móvil */
+    --carta2-subir-md: 29.5vw;         /* escritorio (≥ 768px) */
+    /* Altura de la sección (video completo; más chico = se recorta abajo) */
+    --carta2-altura: 116vw;            /* móvil */
+    --carta2-altura-md: 75vw;          /* escritorio (≥ 768px) */
+    /* Video: ancho (el alto sale solo, 4:3) y cuánto se corre a la izquierda */
+    --carta2-video-ancho: 155.3vw;     /* móvil */
+    --carta2-video-ancho-md: 100vw;    /* escritorio (≥ 768px) */
+    --carta2-video-izquierda: -29.5vw; /* móvil */
+    --carta2-video-izquierda-md: 0vw;  /* escritorio (≥ 768px) */
+    /* Botón "Ver": distancia desde el borde superior, tamaño y corrimiento lateral
+       (positivo = derecha) */
+    --carta2-boton-arriba: 1.6vw;      /* móvil */
+    --carta2-boton-arriba-md: 8.8vw;   /* escritorio (≥ 768px) */
+    --carta2-boton-ancho: 81.5vw;      /* móvil (la imagen trae mucho margen: las letras son ~20%) */
+    --carta2-boton-ancho-md: 30vw;     /* escritorio (≥ 768px) */
+    --carta2-boton-mover-x: 1.8vw;     /* móvil */
+    --carta2-boton-mover-x-md: 0vw;    /* escritorio (≥ 768px) */
     /* Cuánto crece el botón al pasar el mouse (1.1 = 10% más grande) */
     --carta2-boton-hover: 1.1;
 
@@ -53,16 +66,21 @@ import botonVer from "../../../../assets/carta/carta2/imagenes/boton-ver.webp";
 
   /* El video trae franjas blancas de 6px arriba y abajo: se agranda un poco
      y la sección (overflow-hidden) recorta ese sobrante */
+  /* El video trae franjas blancas arriba y abajo: se agranda un poco y la sección
+     (overflow-hidden) recorta ese sobrante */
   .carta2-video {
     max-width: none;
-    top: -0.4vw;
-    height: calc(75vw + 0.8vw);
+    right: auto;
+    left: var(--carta2-video-izquierda);
+    width: var(--carta2-video-ancho);
+    top: calc(var(--carta2-video-ancho) * -0.004);
+    height: calc(var(--carta2-video-ancho) * 0.758);
   }
 
   .carta2-boton {
     top: var(--carta2-boton-arriba);
     width: var(--carta2-boton-ancho);
-    left: 50%;
+    left: calc(50% + var(--carta2-boton-mover-x));
     transform: translateX(-50%);
     transition: transform 0.3s ease, filter 0.3s ease;
   }
@@ -79,5 +97,17 @@ import botonVer from "../../../../assets/carta/carta2/imagenes/boton-ver.webp";
 
   .carta2-boton:focus-visible {
     outline: none;
+  }
+
+  @media (min-width: 768px) {
+    #carta2 {
+      --carta2-subir: var(--carta2-subir-md);
+      --carta2-altura: var(--carta2-altura-md);
+      --carta2-video-ancho: var(--carta2-video-ancho-md);
+      --carta2-video-izquierda: var(--carta2-video-izquierda-md);
+      --carta2-boton-arriba: var(--carta2-boton-arriba-md);
+      --carta2-boton-ancho: var(--carta2-boton-ancho-md);
+      --carta2-boton-mover-x: var(--carta2-boton-mover-x-md);
+    }
   }
 </style>

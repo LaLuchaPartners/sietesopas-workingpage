@@ -37,25 +37,31 @@ import sopas from "../../../../assets/sopas/sopas1/imagenes/sopas.webp";
 </section>
 
 <style>
-  /* ===== Ajustes de Sopas1 ===== */
+  /* ===== Ajustes de Sopas1 =====
+     Móvil = el mismo armado de escritorio ampliado 1.65 veces (los platos llenan el ancho;
+     lo que sobra del video a los costados se recorta). Los valores de móvil son los de
+     escritorio × 1.65, salvo el título, que en el prototipo va más grande. */
   #sopas1 {
-    /* Altura de la sección (75vw muestra el video completo) */
-    --sopas1-altura: 75vw;            /* móvil */
+    /* Altura de la sección (75vw muestra el video completo; en móvil 75 × 1.65) */
+    --sopas1-altura: 123.75vw;        /* móvil */
     --sopas1-altura-md: 75vw;         /* escritorio (≥ 768px) */
     /* Título: distancia desde el borde superior (más grande = más abajo) y ancho */
-    --sopas1-titulo-arriba: 3vw;      /* móvil */
+    --sopas1-titulo-arriba: 3.7vw;    /* móvil */
     --sopas1-titulo-arriba-md: 3vw;   /* escritorio (≥ 768px) */
-    --sopas1-titulo-ancho: 31vw;      /* móvil */
+    --sopas1-titulo-ancho: 63.3vw;    /* móvil */
     --sopas1-titulo-ancho-md: 31vw;   /* escritorio (≥ 768px) */
     /* Nombres de las sopas (Lunes, Martes, Miércoles, Jueves).
        arriba: distancia desde el borde superior (más grande = más abajo)
        ancho: tamaño de la imagen (más grande = nombres más grandes y más separados)
        mover-x: corre la imagen a los lados (positivo = derecha, negativo = izquierda) */
-    --sopas1-nombres-arriba: 12vw;      /* móvil */
+    --sopas1-nombres-arriba: 18.15vw;   /* móvil */
     --sopas1-nombres-arriba-md: 11vw;   /* escritorio (≥ 768px) */
-    --sopas1-nombres-ancho: 59.5vw;     /* móvil */
+    --sopas1-nombres-ancho: 98.2vw;     /* móvil */
     --sopas1-nombres-ancho-md: 59.5vw;  /* escritorio (≥ 768px) */
     --sopas1-nombres-mover-x: 0px;
+    /* MÓVIL: tamaño del video ampliado y cuánto se corre a la izquierda para quedar centrado */
+    --sopas1-video-ancho: 165vw;
+    --sopas1-video-izquierda: -32.5vw;
 
     height: var(--sopas1-altura);
   }
@@ -63,8 +69,12 @@ import sopas from "../../../../assets/sopas/sopas1/imagenes/sopas.webp";
   /* El video trae franjas blancas de 4px arriba y abajo: se agranda un poco
      y la sección (overflow-hidden) recorta ese sobrante */
   .sopas1-video {
-    top: -0.3vw;
-    height: calc(100% + 0.6vw);
+    max-width: none;
+    top: -0.5vw;
+    right: auto;
+    left: var(--sopas1-video-izquierda);
+    width: var(--sopas1-video-ancho);
+    height: calc(100% + 1vw);
   }
 
   .sopas1-titulo {
@@ -84,6 +94,13 @@ import sopas from "../../../../assets/sopas/sopas1/imagenes/sopas.webp";
   @media (min-width: 768px) {
     #sopas1 {
       height: var(--sopas1-altura-md);
+    }
+
+    .sopas1-video {
+      top: -0.3vw;
+      left: 0;
+      width: 100%;
+      height: calc(100% + 0.6vw);
     }
 
     .sopas1-titulo {

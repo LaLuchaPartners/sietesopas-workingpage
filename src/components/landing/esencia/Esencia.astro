@@ -6,10 +6,29 @@ import fondo from "../../../assets/esencia/imagenes/fondo.mp4?url";
 import fondoMovil from "../../../assets/esencia/imagenes/fondo-movil.mp4?url";
 import intermedio from "../../../assets/esencia/imagenes/intermedio.webp";
 import titulo from "../../../assets/esencia/imagenes/titulo.webp";
-import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
+// Textura de papel: la franja central de "intermedio", sin transparencia
+import papel from "../../../assets/esencia/imagenes/papel.webp";
 ---
 
 <section id="esencia" class="relative w-full">
+  <!-- MÓVIL: papel arriba y abajo del video (el video se funde con él) -->
+  <Image
+    src={papel}
+    alt=""
+    aria-hidden="true"
+    class="esencia-papel esencia-papel-arriba absolute left-0 w-full object-cover pointer-events-none"
+    widths={[800, 1600]}
+    sizes="100vw"
+  />
+  <Image
+    src={papel}
+    alt=""
+    aria-hidden="true"
+    class="esencia-papel esencia-papel-abajo absolute left-0 w-full object-cover pointer-events-none"
+    widths={[800, 1600]}
+    sizes="100vw"
+  />
+
   <!-- Video de fondo -->
   <video
     class="esencia-video absolute inset-x-0 top-0 w-full object-cover"
@@ -24,6 +43,16 @@ import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
     <source src={fondo} type="video/mp4" />
   </video>
 
+  <!-- MÓVIL: transición suave con Combi (copia más chica de intermedio, sobre la unión) -->
+  <Image
+    src={intermedio}
+    alt=""
+    aria-hidden="true"
+    class="esencia-transicion-combi absolute left-0 w-full pointer-events-none"
+    widths={[800, 1600]}
+    sizes="100vw"
+  />
+
   <!-- Imagen de transición: se superpone al final de Giro -->
   <Image
     src={intermedio}
@@ -36,7 +65,7 @@ import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
 
   <!-- Contenido -->
   <div class="esencia-contenido relative z-10 flex flex-col items-center text-center">
-    <h2 class="w-[75%] max-w-[560px]">
+    <h2 class="esencia-titulo">
       <Image src={titulo} alt="Nuestra Esencia" class="w-full h-auto" />
     </h2>
 
@@ -48,25 +77,19 @@ import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
         abrazo de bienvenida. Esa es la esencia de Siete Sopas, un tributo al
         corazón de cada hogar peruano.
       </p>
-      <Image
-        src={cubiertos}
-        alt=""
-        aria-hidden="true"
-        class="absolute -right-4 -top-4 md:-right-20 w-[36px] md:w-[56px] h-auto"
-      />
     </div>
   </div>
 
   <!-- Texto 2: posición independiente (no lo mueve el título ni el texto 1) -->
   <div class="esencia-contenido-2 absolute inset-x-0 z-10 flex justify-center text-center">
     <div class="esencia-bloque-2 w-full flex flex-col gap-6">
-      <p class="esencia-texto esencia-texto-1">
+      <p class="esencia-texto esencia-texto-2">
         Nuestra historia se cocina a fuego lento. Nacimos para compartir la
         alegría de un buen caldo, de esos que te abrazan el alma y te devuelven
         la vida. Cada receta es un viaje por el Perú que nos une como familia
         en una mesa donde siempre hay un lugar para ti.
       </p>
-      <p class="esencia-texto esencia-texto-1">
+      <p class="esencia-texto esencia-texto-2">
         ¡En Siete Sopas te esperamos con las puertas abiertas y el pan
         calientito!
       </p>
@@ -79,41 +102,105 @@ import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
   #esencia {
     /* Altura de la sección (el video es 4:3 → 75vw lo muestra completo).
        En móvil necesita más alto para que entren los textos. */
-    --esencia-altura: 190vw;      /* móvil */
+    --esencia-altura: 290vw;      /* móvil */
     --esencia-altura-md: 75vw;    /* escritorio (≥ 768px) */
     /* Cuánto sube la imagen "intermedio" sobre el final de Giro.
        Más grande = más arriba. Puede ser px o vw (ej. 120px, 15vw) */
-    --intermedio-subir: 20vw;
+    --intermedio-subir: 13vw;     /* móvil */
+    --intermedio-subir-md: 20vw;  /* escritorio (≥ 768px) */
     /* Posición del SEGUNDO texto, medida desde el borde superior de la sección.
        Más grande = más abajo. Es independiente del título y del texto 1. px o vw. */
-    --texto2-arriba: 130vw;       /* móvil */
+    --texto2-arriba: 190vw;       /* móvil */
     --texto2-arriba-md: 60vw;     /* escritorio (≥ 768px) */
     /* Color del texto */
     --esencia-color: #7a5230;
     /* Distancia del título al borde superior de la sección.
        Más chico = título más arriba. Acepta negativos para subirlo
        sobre el intermedio (ej. -40px). px o vw. */
-    --titulo-arriba: 14vw;    /* móvil */
-    --titulo-arriba-md: -3vw;  /* escritorio (≥ 768px) */
-    /* Tamaño de los textos (1rem = 16px). Aplica al párrafo de arriba y a los de abajo */
-    --texto1-tamano: 1.125rem;    /* móvil */
-    --texto1-tamano-md: 1.8rem;   /* escritorio (≥ 768px) */
-    /* Ancho máximo de los párrafos, arriba y abajo (px o vw, ej. 1200px, 85vw) */
-    --texto1-ancho: 100%;         /* móvil */
+    --titulo-arriba: 23.6vw;  /* móvil */
+    --titulo-arriba-md: 9vw;   /* escritorio (≥ 768px) */
+    /* Ancho del título "Nuestra Esencia" (px o vw) */
+    --titulo-ancho: 73.2vw;    /* móvil */
+    --titulo-ancho-md: 660px;  /* escritorio (≥ 768px) */
+    /* Tamaño del PRIMER texto, debajo del título (1rem = 16px) */
+    --texto1-tamano: 4.75vw;      /* móvil */
+    --texto1-tamano-md: 1.65rem;  /* escritorio (≥ 768px) */
+    /* Ancho máximo del PRIMER texto (px o vw, ej. 1200px, 85vw) */
+    --texto1-ancho: 69vw;         /* móvil */
     --texto1-ancho-md: 1200px;    /* escritorio (≥ 768px) */
+    /* Tamaño y ancho del SEGUNDO texto (independientes del primero) */
+    --texto2-tamano: 4.75vw;      /* móvil */
+    /* Interlineado de los dos textos (alto de cada línea respecto a la letra) */
+    --texto-interlineado: 1.51;   /* móvil */
+    --texto-interlineado-md: 1.7; /* escritorio (≥ 768px) */
+    --texto2-tamano-md: 1.65rem;   /* escritorio (≥ 768px) */
+    --texto2-ancho: 69vw;         /* móvil */
+    --texto2-ancho-md: 1200px;    /* escritorio (≥ 768px) */
     /* Separación entre el título y el PRIMER texto (px o vw) */
-    --texto1-separacion: 32px;    /* móvil */
+    --texto1-separacion: 19.5vw;  /* móvil */
     --texto1-separacion-md: 72px; /* escritorio (≥ 768px) */
+    /* MÓVIL: el video (la comida) se achica y va debajo del texto 1, como en el prototipo.
+       ancho: tamaño (el alto sale solo, 4:3) · izquierda / arriba: posición */
+    --esencia-video-ancho: 205vw;
+    --esencia-video-izquierda: -53.7vw;
+    --esencia-video-arriba: 68.4vw;
+    /* MÓVIL: papel que llena arriba y abajo del video (sus bordes se funden con él).
+       arriba-alto: hasta dónde llega el papel de arriba (desde el borde superior)
+       abajo-desde: dónde empieza el papel de abajo (sigue hasta el final de la sección) */
+    --esencia-papel-arriba-alto: 102vw;
+    --esencia-papel-abajo-desde: 189vw;
+    /* Cuánto se mete el papel de abajo sobre Combi, desvaneciéndose (une las dos secciones) */
+    --esencia-papel-fundido: 6vw;
+    /* MÓVIL: transición con Combi (imagen intermedio más chica sobre la unión).
+       alto: tamaño (más grande = transición más larga) · mover-y: positivo = más abajo */
+    --esencia-transicion-alto: 50vw;
+    --esencia-transicion-mover-y: -20vw;
 
     height: var(--esencia-altura);
     /* Evita que el margen del contenido "se escape" y separe la sección de Giro */
     display: flow-root;
+    /* El video es más ancho que la pantalla en móvil: se recorta a los costados
+       (sin esto se podía hacer scroll hacia el lado y aparecía una franja negra) */
+    overflow-x: clip;
+    /* Por encima de Combi, para que el papel de abajo se funda sobre su borde */
+    z-index: 1;
   }
 
-  /* El video trae una franja blanca de 4px abajo: se alarga un poco hacia abajo
-     y Combi (que va encima) tapa ese sobrante */
+  .esencia-papel {
+    max-width: none;
+  }
+
+  .esencia-papel-arriba {
+    top: 0;
+    height: var(--esencia-papel-arriba-alto);
+  }
+
+  .esencia-papel-abajo {
+    top: var(--esencia-papel-abajo-desde);
+    height: calc(var(--esencia-altura) - var(--esencia-papel-abajo-desde) + var(--esencia-papel-fundido));
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--esencia-papel-fundido)), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - var(--esencia-papel-fundido)), transparent);
+  }
+
+  /* Móvil: video más chico, con los bordes desvanecidos sobre el papel */
   .esencia-video {
-    height: calc(100% + 0.6vw);
+    top: var(--esencia-video-arriba);
+    left: var(--esencia-video-izquierda);
+    width: var(--esencia-video-ancho);
+    max-width: none;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
+  }
+
+  /* Centrada en el borde de abajo de la sección (la unión con Combi), por encima de todo */
+  .esencia-transicion-combi {
+    max-width: none;
+    height: var(--esencia-transicion-alto);
+    top: calc(var(--esencia-altura) + var(--esencia-transicion-mover-y));
+    transform: translateY(-50%);
+    z-index: 5;
   }
 
   .esencia-intermedio {
@@ -131,6 +218,10 @@ import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
     top: var(--texto2-arriba);
   }
 
+  .esencia-titulo {
+    width: var(--titulo-ancho);
+  }
+
   .esencia-texto {
     color: var(--esencia-color);
     font-size: 0.875rem;
@@ -143,22 +234,55 @@ import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
   }
 
   .esencia-bloque-2 {
-    max-width: var(--texto1-ancho);
+    max-width: var(--texto2-ancho);
   }
 
   .esencia-texto-1 {
     font-size: var(--texto1-tamano);
-    line-height: 1.7;
+    line-height: var(--texto-interlineado);
+  }
+
+  .esencia-texto-2 {
+    font-size: var(--texto2-tamano);
+    line-height: var(--texto-interlineado);
   }
 
   @media (min-width: 768px) {
     #esencia {
       height: var(--esencia-altura-md);
+      /* En escritorio Combi va encima y tapa la franja blanca del final del video */
+      z-index: auto;
+    }
+
+    /* Escritorio: el video ya llena toda la sección, no hace falta el papel */
+    .esencia-papel,
+    .esencia-transicion-combi {
+      display: none;
+    }
+
+    /* Escritorio: el video ocupa toda la sección. Trae una franja blanca de 4px abajo:
+       se alarga un poco hacia abajo y Combi (que va encima) tapa ese sobrante */
+    .esencia-video {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% + 0.6vw);
+      aspect-ratio: auto;
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .esencia-intermedio {
+      top: calc(-1 * var(--intermedio-subir-md));
     }
 
     .esencia-contenido {
       padding: 0 48px;
       margin-top: var(--titulo-arriba-md);
+    }
+
+    .esencia-titulo {
+      width: var(--titulo-ancho-md);
     }
 
     .esencia-contenido-2 {
@@ -176,11 +300,17 @@ import cubiertos from "../../../assets/esencia/imagenes/cubiertos.webp";
     }
 
     .esencia-bloque-2 {
-      max-width: var(--texto1-ancho-md);
+      max-width: var(--texto2-ancho-md);
     }
 
     .esencia-texto-1 {
       font-size: var(--texto1-tamano-md);
+      line-height: var(--texto-interlineado-md);
+    }
+
+    .esencia-texto-2 {
+      font-size: var(--texto2-tamano-md);
+      line-height: var(--texto-interlineado-md);
     }
   }
 </style>

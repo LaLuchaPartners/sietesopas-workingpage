@@ -5,9 +5,21 @@ import { Image } from "astro:assets";
 import intermedio from "../../../../assets/carta/carta1/imagenes/intermedio.webp";
 import fondo from "../../../../assets/carta/carta1/imagenes/fondo.webp";
 import titulo from "../../../../assets/carta/carta1/imagenes/titulo.webp";
+// Textura de papel: la franja central (opaca) de "intermedio"
+import papel from "../../../../assets/carta/carta1/imagenes/papel.webp";
 ---
 
 <section id="carta1" class="relative w-full">
+  <!-- MÓVIL: papel detrás del título y el texto (llena hasta donde empieza el fondo) -->
+  <Image
+    src={papel}
+    alt=""
+    aria-hidden="true"
+    class="carta1-papel absolute left-0 top-0 w-full object-cover pointer-events-none"
+    widths={[800, 1728]}
+    sizes="100vw"
+  />
+
   <!-- 1. Imagen intermedio: tapa la unión con Sopas2 (va debajo del fondo) -->
   <Image
     src={intermedio}
@@ -23,7 +35,7 @@ import titulo from "../../../../assets/carta/carta1/imagenes/titulo.webp";
     src={fondo}
     alt=""
     aria-hidden="true"
-    class="carta1-fondo absolute top-0 left-0 w-full h-auto pointer-events-none"
+    class="carta1-fondo absolute h-auto pointer-events-none"
     widths={[800, 1728]}
     sizes="100vw"
     loading="lazy"
@@ -43,30 +55,46 @@ import titulo from "../../../../assets/carta/carta1/imagenes/titulo.webp";
 </section>
 
 <style>
-  /* ===== Ajustes de Carta1 ===== */
+  /* ===== Ajustes de Carta1 =====
+     Móvil: el fondo (gallina) se amplía 2.15 veces, como en el prototipo, y el título
+     y el texto van encima de un papel. */
   #carta1 {
     /* Cuánto se monta Carta1 sobre el final de Sopas2 (más grande = más arriba) */
     --carta1-subir: 0px;
     /* Altura de la sección. El fondo mide 52vw; más chico = se recorta abajo */
-    --carta1-altura: 52vw;
+    --carta1-altura: 145.5vw;           /* móvil */
+    --carta1-altura-md: 52vw;           /* escritorio (≥ 768px) */
+    /* Fondo (gallina): ancho, cuánto se corre a la izquierda y distancia desde arriba */
+    --carta1-fondo-ancho: 215vw;        /* móvil */
+    --carta1-fondo-ancho-md: 100vw;     /* escritorio (≥ 768px) */
+    --carta1-fondo-izquierda: -57.5vw;  /* móvil */
+    --carta1-fondo-izquierda-md: 0vw;   /* escritorio (≥ 768px) */
+    --carta1-fondo-arriba: 33.5vw;      /* móvil */
+    --carta1-fondo-arriba-md: 0vw;      /* escritorio (≥ 768px) */
+    /* MÓVIL: hasta dónde llega el papel de detrás del título (desde arriba) */
+    --carta1-papel-alto: 75vw;
     /* Posición de la imagen intermedio respecto al borde superior de Carta1
        (0px = centrada en la unión; positivo = más abajo, negativo = más arriba) */
-    --carta1-intermedio-mover-y: 100px;
+    --carta1-intermedio-mover-y: 20vw;    /* móvil */
+    --carta1-intermedio-mover-y-md: 100px; /* escritorio (≥ 768px) */
     /* Título: distancia desde el borde superior (más grande = más abajo).
        El texto se mueve con el título. */
-    --carta1-titulo-arriba: 0vw;        /* móvil */
+    --carta1-titulo-arriba: 9.5vw;      /* móvil */
     --carta1-titulo-arriba-md: 0vw;     /* escritorio (≥ 768px) */
     /* Ancho del título */
-    --carta1-titulo-ancho: 30vw;        /* móvil */
+    --carta1-titulo-ancho: 36.3vw;      /* móvil */
     --carta1-titulo-ancho-md: 20vw;     /* escritorio (≥ 768px) */
     /* Separación entre el título y el texto */
-    --carta1-texto-separacion: 8px;      /* móvil */
+    --carta1-texto-separacion: 8.9vw;    /* móvil */
     --carta1-texto-separacion-md: 2vw;   /* escritorio (≥ 768px) */
     /* Tamaño del texto (1rem = 16px) */
-    --carta1-texto-tamano: 0.875rem;     /* móvil */
+    --carta1-texto-tamano: 4.9vw;        /* móvil */
     --carta1-texto-tamano-md: 1.8rem;    /* escritorio (≥ 768px) */
+    /* Interlineado del texto (alto de cada línea respecto a la letra) */
+    --carta1-texto-interlineado: 1.43;   /* móvil */
+    --carta1-texto-interlineado-md: 1.7; /* escritorio (≥ 768px) */
     /* Ancho máximo del texto */
-    --carta1-texto-ancho: 100%;          /* móvil */
+    --carta1-texto-ancho: 72vw;          /* móvil */
     --carta1-texto-ancho-md: 1200px;     /* escritorio (≥ 768px) */
     /* Color del texto */
     --carta1-color: #7a5230;
@@ -75,11 +103,28 @@ import titulo from "../../../../assets/carta/carta1/imagenes/titulo.webp";
     margin-top: calc(-1 * var(--carta1-subir));
     /* Carta1 va encima de Carta2: el final del fondo se desvanece y deja ver su video */
     z-index: 1;
+    /* En móvil el fondo es más ancho que la pantalla: se recorta a los costados */
+    overflow-x: clip;
+  }
+
+  .carta1-papel {
+    max-width: none;
+    height: var(--carta1-papel-alto);
   }
 
   .carta1-intermedio {
+    max-width: none;
+    left: var(--carta1-fondo-izquierda);
+    width: var(--carta1-fondo-ancho);
     top: var(--carta1-intermedio-mover-y);
     transform: translateY(-50%);
+  }
+
+  .carta1-fondo {
+    max-width: none;
+    top: var(--carta1-fondo-arriba);
+    left: var(--carta1-fondo-izquierda);
+    width: var(--carta1-fondo-ancho);
   }
 
   .carta1-contenido {
@@ -97,10 +142,22 @@ import titulo from "../../../../assets/carta/carta1/imagenes/titulo.webp";
     margin-top: var(--carta1-texto-separacion);
     color: var(--carta1-color);
     font-size: var(--carta1-texto-tamano);
-    line-height: 1.7;
+    line-height: var(--carta1-texto-interlineado);
   }
 
   @media (min-width: 768px) {
+    #carta1 {
+      --carta1-altura: var(--carta1-altura-md);
+      --carta1-fondo-ancho: var(--carta1-fondo-ancho-md);
+      --carta1-fondo-izquierda: var(--carta1-fondo-izquierda-md);
+      --carta1-fondo-arriba: var(--carta1-fondo-arriba-md);
+      --carta1-intermedio-mover-y: var(--carta1-intermedio-mover-y-md);
+    }
+
+    .carta1-papel {
+      display: none;
+    }
+
     .carta1-contenido {
       top: var(--carta1-titulo-arriba-md);
       padding: 0 48px;
@@ -114,6 +171,7 @@ import titulo from "../../../../assets/carta/carta1/imagenes/titulo.webp";
       max-width: var(--carta1-texto-ancho-md);
       margin-top: var(--carta1-texto-separacion-md);
       font-size: var(--carta1-texto-tamano-md);
+      line-height: var(--carta1-texto-interlineado-md);
     }
   }
 </style>

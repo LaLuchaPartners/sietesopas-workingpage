@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+// Cursor de toda la web: el tenedor (PNG, para que funcione en todos los navegadores)
+import tenedor from '../assets/cursor/tenedor.png?url';
 
 interface Props {
 	title?: string;
@@ -10,6 +12,12 @@ const {
 	title = 'Siete Sopas',
 	description = 'Siete Sopas',
 } = Astro.props;
+
+// Punto exacto que "hace clic" dentro de la imagen del tenedor (50×60 px), medido
+// desde la esquina superior izquierda: la punta de los dientes, arriba a la derecha.
+const cursorX = 40;
+const cursorY = 3;
+const cursorTenedor = `url("${tenedor}") ${cursorX} ${cursorY}`;
 ---
 
 <!doctype html>
@@ -26,3 +34,18 @@ const {
 		<slot />
 	</body>
 </html>
+
+<style is:global define:vars={{ cursorTenedor }}>
+	/* El tenedor reemplaza al mouse en toda la página, también sobre enlaces y botones
+	   (si el navegador no puede cargarlo, usa el cursor normal) */
+	html {
+		cursor: var(--cursorTenedor), auto;
+	}
+
+	a,
+	button,
+	select,
+	label {
+		cursor: var(--cursorTenedor), pointer;
+	}
+</style>

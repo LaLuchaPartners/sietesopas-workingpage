@@ -6,6 +6,9 @@ import fondo from "../../../assets/giro/imagenes/fondo.mp4?url";
 import fondoMovil from "../../../assets/giro/imagenes/fondo-movil.mp4?url";
 import logo from "../../../assets/giro/logos/siete-sopas-logo.webp";
 import delivery from "../../../assets/giro/logos/delivery.webp";
+
+// Enlace del botón de delivery (PedidosYa). Falta definir la URL de la tienda.
+const pedidosYa = "#";
 ---
 
 <section id="giro" class="relative w-full overflow-hidden">
@@ -24,56 +27,135 @@ import delivery from "../../../assets/giro/logos/delivery.webp";
     <source src={fondo} type="video/mp4" />
   </video>
 
-  <!-- Logo (izquierda) y Delivery (derecha) -->
-  <header
-    class="relative z-10 flex items-start justify-between px-6 pt-6 md:px-12 md:pt-10"
-  >
+  <!-- Logo (izquierda, solo imagen) y botón de PedidosYa (derecha) -->
+  <header class="giro-header relative z-10 flex items-start justify-between">
     <Image
       src={logo}
       alt="Siete Sopas 24 horas"
-      class="w-[140px] md:w-[220px] h-auto drop-shadow-lg"
+      class="giro-logo h-auto drop-shadow-lg"
       loading="eager"
     />
-    <Image
-      src={delivery}
-      alt="Delivery"
-      class="w-[150px] md:w-[240px] h-auto drop-shadow-lg"
-      loading="eager"
-    />
+    <a
+      href={pedidosYa}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="giro-pedidos"
+      aria-label="Pide delivery por PedidosYa"
+    >
+      <Image
+        src={delivery}
+        alt="Delivery"
+        class="w-full h-auto drop-shadow-lg"
+        loading="eager"
+      />
+    </a>
   </header>
 </section>
 
 <style>
   /* ===== Ajustes del fondo ===== */
   #giro {
-    /* Altura de la sección en móvil.
-       75vw   = video completo, sin recortes (el video es 4:3 → alto = 75% del ANCHO)
-       100svh = pantalla completa (recorta el video arriba/abajo) */
-    --giro-altura: 75vw;
-    /* Altura de la sección en escritorio (≥ 768px) */
-    --giro-altura-md: 75vw;
-    /* Solo aplica cuando el video se recorta (altura menor a 75vw):
+    /* Altura de la sección.
+       Móvil: 223vw = una pantalla de celular, como en el prototipo.
+       Escritorio: 75vw = video completo, sin recortes (el video es 4:3) */
+    --giro-altura: 223vw;             /* móvil */
+    --giro-altura-md: 75vw;           /* escritorio (≥ 768px) */
+    /* MÓVIL: el video se agranda y se corre para que se vea el sol y el señor
+       con la olla, igual que el prototipo.
+       ancho: tamaño del video (100vw = ancho de la pantalla; el alto sale solo, 4:3)
+       izquierda / arriba: cuánto se corre (negativo = hacia la izquierda / arriba) */
+    --giro-video-ancho: 358vw;
+    --giro-video-izquierda: -138vw;
+    --giro-video-arriba: -7.3vw;
+    /* ESCRITORIO: solo aplica cuando el video se recorta (altura menor a 75vw):
        0% = se ve la parte de arriba, 50% = centro, 100% = parte de abajo */
     --giro-foco: 35%;
-    /* Cuánto se sube el video para esconder la franja blanca que trae arriba.
-       Si ves la línea blanca, auméntalo (ej. 20px, 30px); si se corta de más, bájalo.
+    /* ESCRITORIO: cuánto se sube el video para esconder la franja blanca que trae arriba.
        1.6vw = justo el grosor de la franja cuando el video se ve completo. */
     --giro-subir: 1.6vw;
+    /* Logo y botón de PedidosYa: distancia desde arriba, margen lateral y tamaño */
+    --giro-header-arriba: 10.8vw;     /* móvil */
+    --giro-header-arriba-md: 60px;    /* escritorio (≥ 768px) */
+    --giro-header-lados: 7vw;         /* móvil */
+    --giro-header-lados-md: 64px;     /* escritorio (≥ 768px) */
+    --giro-logo-ancho: 29.6vw;        /* móvil */
+    --giro-logo-ancho-md: 250px;      /* escritorio (≥ 768px) */
+    --giro-pedidos-ancho: 37.3vw;     /* móvil */
+    --giro-pedidos-ancho-md: 370px;   /* escritorio (≥ 768px) */
+    /* Cuánto más abajo que el logo va el botón de PedidosYa */
+    --giro-pedidos-bajar: 1.1vw;      /* móvil */
+    --giro-pedidos-bajar-md: 0px;     /* escritorio (≥ 768px) */
+    /* Cuánto crece el botón de PedidosYa al pasar el mouse */
+    --giro-pedidos-hover: 1.08;
 
     height: var(--giro-altura);
   }
 
-  /* El video se extiende por arriba y por abajo de la sección
-     (la sección oculta lo que sobra), así no se ven las franjas blancas */
+  .giro-header {
+    padding: var(--giro-header-arriba) var(--giro-header-lados) 0;
+  }
+
+  .giro-logo {
+    width: var(--giro-logo-ancho);
+  }
+
+  .giro-pedidos {
+    display: block;
+    width: var(--giro-pedidos-ancho);
+    margin-top: var(--giro-pedidos-bajar);
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .giro-pedidos:hover,
+  .giro-pedidos:focus-visible {
+    transform: scale(var(--giro-pedidos-hover));
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.45));
+  }
+
+  .giro-pedidos:active {
+    transform: scale(0.97);
+  }
+
+  /* Móvil: video agrandado y corrido (la sección oculta lo que sobra) */
   .giro-video {
-    top: calc(-1 * var(--giro-subir));
-    height: calc(100% + 2 * var(--giro-subir));
-    object-position: center var(--giro-foco);
+    top: var(--giro-video-arriba);
+    left: var(--giro-video-izquierda);
+    width: var(--giro-video-ancho);
+    max-width: none;
+    height: auto;
+    aspect-ratio: 4 / 3;
   }
 
   @media (min-width: 768px) {
     #giro {
       height: var(--giro-altura-md);
+    }
+
+    /* Escritorio: el video se extiende por arriba y por abajo de la sección
+       (la sección oculta lo que sobra), así no se ven las franjas blancas */
+    .giro-video {
+      top: calc(-1 * var(--giro-subir));
+      left: 0;
+      width: 100%;
+      height: calc(100% + 2 * var(--giro-subir));
+      aspect-ratio: auto;
+      object-position: center var(--giro-foco);
+    }
+
+    .giro-pedidos {
+      margin-top: var(--giro-pedidos-bajar-md);
+    }
+
+    .giro-header {
+      padding: var(--giro-header-arriba-md) var(--giro-header-lados-md) 0;
+    }
+
+    .giro-logo {
+      width: var(--giro-logo-ancho-md);
+    }
+
+    .giro-pedidos {
+      width: var(--giro-pedidos-ancho-md);
     }
   }
 </style>

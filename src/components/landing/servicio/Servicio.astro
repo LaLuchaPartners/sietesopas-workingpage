@@ -6,7 +6,9 @@ import fondo from "../../../assets/servicio/imagenes/fondo.mp4?url";
 import fondoMovil from "../../../assets/servicio/imagenes/fondo-movil.mp4?url";
 import intermedio from "../../../assets/servicio/imagenes/intermedio.webp";
 import titulo from "../../../assets/servicio/imagenes/titulo.webp";
-import fotos from "../../../assets/servicio/imagenes/fotos.webp";
+import fotos1 from "../../../assets/servicio/imagenes/fotos-1.webp";
+import fotos2 from "../../../assets/servicio/imagenes/fotos-2.webp";
+import fotos3 from "../../../assets/servicio/imagenes/fotos-3.webp";
 ---
 
 <section id="servicio" class="relative w-full">
@@ -53,11 +55,26 @@ import fotos from "../../../assets/servicio/imagenes/fotos.webp";
     </p>
   </div>
 
-  <!-- Fotos: una sola imagen ya ordenada para calzar en los marcos del video -->
+  <!-- Fotos de los marcos, en tres grupos que se ubican por separado:
+       1 = foto redonda de arriba, 2 = las tres del medio, 3 = la fila de abajo -->
   <Image
-    src={fotos}
-    alt="Nuestro equipo atendiendo en Siete Sopas"
-    class="servicio-fotos absolute z-[1] h-auto pointer-events-none"
+    src={fotos1}
+    alt="Colaboradora de Siete Sopas sirviendo empanadas"
+    class="servicio-fotos servicio-fotos-1 absolute z-[1] h-auto pointer-events-none"
+    widths={[400]}
+    sizes="25vw"
+  />
+  <Image
+    src={fotos2}
+    alt="Nuestro equipo atendiendo a los comensales"
+    class="servicio-fotos servicio-fotos-2 absolute z-[1] h-auto pointer-events-none"
+    widths={[800, 1250]}
+    sizes="76vw"
+  />
+  <Image
+    src={fotos3}
+    alt="Colaboradores de Siete Sopas en el local"
+    class="servicio-fotos servicio-fotos-3 absolute z-[1] h-auto pointer-events-none"
     widths={[800, 1278]}
     sizes="78vw"
   />
@@ -89,11 +106,20 @@ import fotos from "../../../assets/servicio/imagenes/fotos.webp";
     --servicio-texto-ancho-md: 66vw;       /* escritorio (≥ 768px) */
     /* Color del texto */
     --servicio-color: #f3ead8;
-    /* Fotos de los marcos. Están calibradas para que la foto redonda calce en su
-       marco; si mueves una, se mueven todas juntas. */
-    --servicio-fotos-arriba: 44vw;
-    --servicio-fotos-izquierda: 10.75vw;
-    --servicio-fotos-ancho: 77.3vw;
+    /* Fotos de los marcos, cada grupo por separado (arriba / izquierda = posición,
+       ancho = tamaño).
+       Fotos 1: la redonda de arriba */
+    --servicio-fotos1-arriba: 44vw;
+    --servicio-fotos1-izquierda: 37.67vw;
+    --servicio-fotos1-ancho: 24.19vw;
+    /* Fotos 2: las tres del medio */
+    --servicio-fotos2-arriba: 83.65vw;
+    --servicio-fotos2-izquierda: 13.05vw;
+    --servicio-fotos2-ancho: 74.1vw;
+    /* Fotos 3: la fila de abajo */
+    --servicio-fotos3-arriba: 132.95vw;
+    --servicio-fotos3-izquierda: 11.4vw;
+    --servicio-fotos3-ancho: 76.25vw;
 
     height: var(--servicio-altura);
     margin-top: calc(-1 * var(--servicio-subir));
@@ -130,9 +156,25 @@ import fotos from "../../../assets/servicio/imagenes/fotos.webp";
   }
 
   .servicio-fotos {
-    top: var(--servicio-fotos-arriba);
-    left: var(--servicio-fotos-izquierda);
-    width: var(--servicio-fotos-ancho);
+    max-width: none;
+  }
+
+  .servicio-fotos-1 {
+    top: var(--servicio-fotos1-arriba);
+    left: var(--servicio-fotos1-izquierda);
+    width: var(--servicio-fotos1-ancho);
+  }
+
+  .servicio-fotos-2 {
+    top: var(--servicio-fotos2-arriba);
+    left: var(--servicio-fotos2-izquierda);
+    width: var(--servicio-fotos2-ancho);
+  }
+
+  .servicio-fotos-3 {
+    top: var(--servicio-fotos3-arriba);
+    left: var(--servicio-fotos3-izquierda);
+    width: var(--servicio-fotos3-ancho);
   }
 
   @media (min-width: 768px) {

@@ -8,10 +8,15 @@ import tiendas1 from "../../../assets/tiendas/imagenes/tiendas-1.webp";
 import tiendas2 from "../../../assets/tiendas/imagenes/tiendas-2.webp";
 import tiendas3 from "../../../assets/tiendas/imagenes/tiendas-3.webp";
 import tiendas4 from "../../../assets/tiendas/imagenes/tiendas-4.webp";
+import sopita from "../../../assets/tiendas/imagenes/sopita.webp";
+import envase from "../../../assets/tiendas/imagenes/envase.webp";
+import flechaIzquierda from "../../../assets/tiendas/imagenes/flecha-izquierda.webp";
+import flechaDerecha from "../../../assets/tiendas/imagenes/flecha-derecha.webp";
 import libroReclamaciones from "../../../assets/tiendas/imagenes/libro-reclamaciones.webp";
 import facturacion from "../../../assets/tiendas/imagenes/facturacion.webp";
 import tiktok from "../../../assets/tiendas/imagenes/tiktok.webp";
 import instagram from "../../../assets/tiendas/imagenes/instagram.webp";
+import facebook from "../../../assets/tiendas/imagenes/facebook.webp";
 import logo from "../../../assets/tiendas/imagenes/logo.webp";
 
 const base = import.meta.env.BASE_URL;
@@ -22,23 +27,22 @@ const enlaces = {
   terminosCondiciones: "#",
   datosPersonales: "#",
   cartaRestaurantes: `${base}carta`,
-  localesLima: "#",
-  oficinas: "#",
   libroReclamaciones: "https://lalucha.com.pe/reclamos/",
   facturacion: "https://comprobantes.lalucha.com.pe",
   tiktok: "#",
   instagram: "#",
+  facebook: "#",
 };
 
 // Imágenes de tiendas que van rotando (animación al final del archivo).
-// No miden lo mismo: "dx" es el corrimiento en px (medido sobre la imagen original)
-// para que las flechas y los iconos de todas caigan en el mismo sitio que en la 1.
-// (tiendas-5, 6 y 7 son copias de la 1, 2 y 3, por eso no se usan)
+// No miden lo mismo: "dx" (corrimiento lateral) y "dy" (distancia desde arriba), en px
+// medidos sobre la imagen original, hacen que todas calcen con las flechas y los iconos.
+// (las tiendas 5, 6 y 7 son copias de la 1, 2 y 3, por eso no se usan)
 const tiendas = [
-  { src: tiendas1, alt: "Sedes Angamos, Kennedy y Gamarra", dx: 0 },
-  { src: tiendas2, alt: "Sedes Santa Anita, Ricardo Palma y Plaza Norte", dx: 38 },
-  { src: tiendas3, alt: "Sedes San Juan de Lurigancho, Surco y Lince Terrazas", dx: 36 },
-  { src: tiendas4, alt: "Sedes Independencia, Lince y Trujillo", dx: 6 },
+  { src: tiendas1, alt: "Sedes Angamos, Kennedy y Gamarra", dx: 0, dy: 86 },
+  { src: tiendas2, alt: "Sedes Santa Anita, Ricardo Palma y Plaza Norte", dx: 38, dy: 26 },
+  { src: tiendas3, alt: "Sedes San Juan de Lurigancho, Surco y Lince Terrazas", dx: 36, dy: 14 },
+  { src: tiendas4, alt: "Sedes Independencia, Lince y Trujillo", dx: 6, dy: 0 },
 ];
 // Ancho de la tienda 1 en px: es la referencia para escalar todas por igual
 const anchoReferencia = tiendas1.width;
@@ -70,20 +74,42 @@ const anchoReferencia = tiendas1.width;
     </p>
   </div>
 
-  <!-- Tiendas: todas en el mismo lugar, alineadas por abajo, cambian con un desvanecido -->
+  <!-- Tiendas: todas en el mismo lugar, cambian con un desvanecido -->
   <div class="tiendas-imagenes absolute inset-x-0 z-10">
     {
       tiendas.map((tienda, i) => (
         <Image
           src={tienda.src}
           alt={tienda.alt}
-          class:list={["tiendas-imagen absolute bottom-0 h-auto", { visible: i === 0 }]}
-          style={`--ancho-relativo: ${tienda.src.width / anchoReferencia}; --dx-relativo: ${tienda.dx / anchoReferencia};`}
+          class:list={["tiendas-imagen absolute h-auto", { visible: i === 0 }]}
+          style={`--ancho-relativo: ${tienda.src.width / anchoReferencia}; --dx-relativo: ${tienda.dx / anchoReferencia}; --dy-relativo: ${tienda.dy / anchoReferencia};`}
           widths={[800, tienda.src.width]}
           sizes="90vw"
         />
       ))
     }
+
+    <!-- Flechas (se mueven solas, apuntando hacia su botón) -->
+    <Image
+      src={flechaIzquierda}
+      alt=""
+      aria-hidden="true"
+      class="tiendas-flecha tiendas-flecha-izquierda absolute h-auto pointer-events-none"
+    />
+    <Image
+      src={flechaDerecha}
+      alt=""
+      aria-hidden="true"
+      class="tiendas-flecha tiendas-flecha-derecha absolute h-auto pointer-events-none"
+    />
+
+    <!-- Botones: la sopita muestra las tiendas anteriores y el envase las siguientes -->
+    <button type="button" class="tiendas-boton tiendas-boton-anterior absolute" data-direccion="-1" aria-label="Ver tiendas anteriores">
+      <Image src={sopita} alt="" class="w-full h-auto" />
+    </button>
+    <button type="button" class="tiendas-boton tiendas-boton-siguiente absolute" data-direccion="1" aria-label="Ver tiendas siguientes">
+      <Image src={envase} alt="" class="w-full h-auto" />
+    </button>
   </div>
 
   <!-- Footer -->
@@ -92,7 +118,7 @@ const anchoReferencia = tiendas1.width;
       <!-- Fila 1: títulos -->
       <h3 class="footer-titulo">Nosotros</h3>
       <h3 class="footer-titulo">Servicios</h3>
-      <h3 class="footer-titulo">Contáctanos</h3>
+      <h3 class="footer-titulo">Síguenos</h3>
       <Image src={logo} alt="Siete Sopas" class="footer-logo h-auto" />
 
       <!-- Fila 2: enlaces -->
@@ -104,12 +130,20 @@ const anchoReferencia = tiendas1.width;
       <ul class="footer-enlaces">
         <li><a href={enlaces.cartaRestaurantes}>Carta de Restaurantes</a></li>
       </ul>
-      <ul class="footer-enlaces">
-        <li><a href={enlaces.localesLima}>Locales en Lima</a></li>
-        <li><a href={enlaces.oficinas}>Oficinas</a></li>
-      </ul>
+      <!-- Síguenos: las redes van directo bajo el título -->
+      <div class="footer-redes flex items-center">
+        <a href={enlaces.tiktok} target="_blank" rel="noopener noreferrer" class="footer-boton footer-red-tiktok">
+          <Image src={tiktok} alt="TikTok de Siete Sopas" class="w-full h-auto" />
+        </a>
+        <a href={enlaces.instagram} target="_blank" rel="noopener noreferrer" class="footer-boton footer-red-instagram">
+          <Image src={instagram} alt="Instagram de Siete Sopas" class="w-full h-auto" />
+        </a>
+        <a href={enlaces.facebook} target="_blank" rel="noopener noreferrer" class="footer-boton footer-red-facebook">
+          <Image src={facebook} alt="Facebook de Siete Sopas" class="w-full h-auto" />
+        </a>
+      </div>
 
-      <!-- Fila 3: botones y redes -->
+      <!-- Fila 3: botones -->
       <a
         href={enlaces.libroReclamaciones}
         target="_blank"
@@ -126,14 +160,6 @@ const anchoReferencia = tiendas1.width;
       >
         <Image src={facturacion} alt="Facturación" class="w-full h-auto" />
       </a>
-      <div class="footer-redes flex items-center">
-        <a href={enlaces.tiktok} target="_blank" rel="noopener noreferrer" class="footer-boton footer-red-tiktok">
-          <Image src={tiktok} alt="TikTok de Siete Sopas" class="w-full h-auto" />
-        </a>
-        <a href={enlaces.instagram} target="_blank" rel="noopener noreferrer" class="footer-boton footer-red-instagram">
-          <Image src={instagram} alt="Instagram de Siete Sopas" class="w-full h-auto" />
-        </a>
-      </div>
     </div>
 
     <p class="footer-derechos">Todos los derechos reservados por Lucha Partners</p>
@@ -149,7 +175,7 @@ const anchoReferencia = tiendas1.width;
     /* Altura de la sección (el fondo mide 105.8vw) */
     --tiendas-altura: 105.8vw;
     /* Título: distancia desde el borde superior (el texto lo sigue) y ancho */
-    --tiendas-titulo-arriba: 18vw;
+    --tiendas-titulo-arriba: 24vw;
     --tiendas-titulo-ancho: 24vw;
     /* Separación entre el título y el texto */
     --tiendas-texto-separacion: 8px;      /* móvil */
@@ -170,6 +196,27 @@ const anchoReferencia = tiendas1.width;
     /* Animación: cuánto se queda cada imagen y cuánto dura el desvanecido */
     --tiendas-animacion-pausa: 2500ms;
     --tiendas-animacion-transicion: 900ms;
+    /* Sopita (izquierda = tiendas anteriores) y envase (derecha = siguientes).
+       izquierda: distancia desde el centro de la pantalla (negativo = a la izquierda)
+       arriba: desde el borde superior de las imágenes de tiendas · ancho: tamaño */
+    --tiendas-sopita-izquierda: -22.13vw;
+    --tiendas-sopita-arriba: 20.73vw;
+    --tiendas-sopita-ancho: 4.57vw;
+    --tiendas-envase-izquierda: 20.73vw;
+    --tiendas-envase-arriba: 21.18vw;
+    --tiendas-envase-ancho: 3.4vw;
+    /* Cuánto crecen la sopita y el envase al pasar el mouse */
+    --tiendas-boton-hover: 1.15;
+    /* Flechas: misma forma de medir que los botones */
+    --tiendas-flecha1-izquierda: -16.1vw;
+    --tiendas-flecha1-arriba: 22.02vw;
+    --tiendas-flecha1-ancho: 9.53vw;
+    --tiendas-flecha2-izquierda: 9.37vw;
+    --tiendas-flecha2-arriba: 21.74vw;
+    --tiendas-flecha2-ancho: 9.59vw;
+    /* Movimiento de las flechas: cuánto avanzan hacia su botón y cuánto dura una ida y vuelta */
+    --tiendas-flecha-movimiento: 0.7vw;
+    --tiendas-flecha-duracion: 1.6s;
     /* Footer: dónde empieza (desde el borde superior) */
     --tiendas-footer-arriba: 79vw;
     /* Footer: dónde empieza cada columna, medido desde el borde izquierdo */
@@ -186,6 +233,7 @@ const anchoReferencia = tiendas1.width;
     --footer-facturacion-ancho: 15.1vw;
     --footer-tiktok-ancho: 2.75vw;
     --footer-instagram-ancho: 2.4vw;
+    --footer-facebook-ancho: 2.4vw;
     --footer-logo-ancho: 8vw;
     /* Footer: separaciones verticales */
     --footer-titulo-enlaces: 1.8vw;   /* entre título y enlaces */
@@ -223,6 +271,7 @@ const anchoReferencia = tiendas1.width;
   }
 
   .tiendas-imagen {
+    top: calc(var(--tiendas-imagenes-ancho) * var(--dy-relativo));
     width: calc(var(--tiendas-imagenes-ancho) * var(--ancho-relativo));
     max-width: none;
     left: calc(
@@ -235,6 +284,97 @@ const anchoReferencia = tiendas1.width;
 
   .tiendas-imagen.visible {
     opacity: 1;
+  }
+
+  /* Flechas y botones: posición medida desde el centro (más el corrimiento general) */
+  .tiendas-flecha,
+  .tiendas-boton {
+    max-width: none;
+    z-index: 1;
+  }
+
+  .tiendas-flecha-izquierda {
+    left: calc(50% + var(--tiendas-imagenes-mover-x) + var(--tiendas-flecha1-izquierda));
+    top: var(--tiendas-flecha1-arriba);
+    width: var(--tiendas-flecha1-ancho);
+    --direccion-flecha: -1;
+  }
+
+  .tiendas-flecha-derecha {
+    left: calc(50% + var(--tiendas-imagenes-mover-x) + var(--tiendas-flecha2-izquierda));
+    top: var(--tiendas-flecha2-arriba);
+    width: var(--tiendas-flecha2-ancho);
+    --direccion-flecha: 1;
+  }
+
+  /* Las dos flechas van juntas hacia el centro y vuelven a salir al mismo tiempo
+     (--direccion-flecha apunta hacia su botón; el vaivén va al revés, hacia el centro) */
+  .tiendas-flecha {
+    animation: tiendas-flecha-vaiven var(--tiendas-flecha-duracion) ease-in-out infinite;
+  }
+
+  /* Al hacer clic en un botón, su flecha da un empujón más fuerte */
+  .tiendas-flecha.empujon {
+    animation: tiendas-flecha-empujon 0.45s ease-out;
+  }
+
+  @keyframes tiendas-flecha-vaiven {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(calc(-1 * var(--direccion-flecha) * var(--tiendas-flecha-movimiento)));
+    }
+  }
+
+  @keyframes tiendas-flecha-empujon {
+    0% {
+      transform: translateX(0);
+    }
+    40% {
+      transform: translateX(calc(var(--direccion-flecha) * var(--tiendas-flecha-movimiento) * 2.5));
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  .tiendas-boton {
+    display: block;
+    padding: 0;
+    background: none;
+    border: 0;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+
+  .tiendas-boton-anterior {
+    left: calc(50% + var(--tiendas-imagenes-mover-x) + var(--tiendas-sopita-izquierda));
+    top: var(--tiendas-sopita-arriba);
+    width: var(--tiendas-sopita-ancho);
+  }
+
+  .tiendas-boton-siguiente {
+    left: calc(50% + var(--tiendas-imagenes-mover-x) + var(--tiendas-envase-izquierda));
+    top: var(--tiendas-envase-arriba);
+    width: var(--tiendas-envase-ancho);
+  }
+
+  .tiendas-boton:hover,
+  .tiendas-boton:focus-visible {
+    transform: scale(var(--tiendas-boton-hover));
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+  }
+
+  .tiendas-boton:active {
+    transform: scale(0.92);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tiendas-flecha,
+    .tiendas-flecha.empujon {
+      animation: none;
+    }
   }
 
   .tiendas-footer {
@@ -311,9 +451,10 @@ const anchoReferencia = tiendas1.width;
     width: var(--footer-facturacion-ancho);
   }
 
+  /* Redes en la columna Síguenos, a la misma altura que los enlaces de las otras columnas */
   .footer-redes {
     gap: 1.3vw;
-    margin-top: var(--footer-enlaces-botones);
+    margin-top: var(--footer-titulo-enlaces);
   }
 
   .footer-redes .footer-boton {
@@ -322,6 +463,10 @@ const anchoReferencia = tiendas1.width;
 
   .footer-red-tiktok {
     width: var(--footer-tiktok-ancho);
+  }
+
+  .footer-red-facebook {
+    width: var(--footer-facebook-ancho);
   }
 
   .footer-red-instagram {
@@ -351,13 +496,15 @@ const anchoReferencia = tiendas1.width;
 <script>
   // Animación de las tiendas: cada imagen se desvanece mientras aparece la siguiente
   // (1 → 2 → 3 → 4 → 1 …). Solo corre mientras la sección está en pantalla.
+  // La sopita va a las tiendas anteriores y el envase a las siguientes; al usarlos,
+  // la cuenta para el cambio automático vuelve a empezar.
   const seccion = document.querySelector<HTMLElement>("#tiendas");
   const imagenes = seccion
     ? [...seccion.querySelectorAll<HTMLElement>(".tiendas-imagen")]
     : [];
   const sinMovimiento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  if (seccion && imagenes.length > 1 && !sinMovimiento) {
+  if (seccion && imagenes.length > 1) {
     // Lee un tiempo del CSS en milisegundos. Respeta la unidad: al compilar,
     // el CSS se minifica y "2500ms" pasa a "2.5s".
     const leerMs = (nombre: string) => {
@@ -370,21 +517,57 @@ const anchoReferencia = tiendas1.width;
 
     let actual = 0;
     let temporizador: number | undefined;
+    let enPantalla = false;
 
-    const avanzar = () => {
+    // Muestra la tienda que está "pasos" más allá (1 = siguiente, -1 = anterior)
+    const mover = (pasos: number) => {
       imagenes[actual].classList.remove("visible");
-      actual = (actual + 1) % imagenes.length;
+      actual = (actual + pasos + imagenes.length) % imagenes.length;
       imagenes[actual].classList.add("visible");
-      temporizador = window.setTimeout(avanzar, pausa + transicion);
+    };
+
+    // (Re)inicia la cuenta para el próximo cambio automático
+    const programar = (espera: number) => {
+      clearTimeout(temporizador);
+      temporizador = undefined;
+      if (sinMovimiento || !enPantalla) return;
+      temporizador = window.setTimeout(() => {
+        mover(1);
+        programar(pausa + transicion);
+      }, espera);
     };
 
     new IntersectionObserver(([entrada]) => {
-      if (entrada.isIntersecting && temporizador === undefined) {
-        temporizador = window.setTimeout(avanzar, pausa);
-      } else if (!entrada.isIntersecting && temporizador !== undefined) {
-        clearTimeout(temporizador);
-        temporizador = undefined;
-      }
+      enPantalla = entrada.isIntersecting;
+      programar(pausa);
     }).observe(seccion);
+
+    // Botones: cambian de tienda y su flecha da un empujón
+    seccion.querySelectorAll<HTMLButtonElement>(".tiendas-boton").forEach((boton) => {
+      const direccion = Number(boton.dataset.direccion);
+      const flecha = seccion.querySelector<HTMLElement>(
+        direccion < 0 ? ".tiendas-flecha-izquierda" : ".tiendas-flecha-derecha"
+      );
+      boton.addEventListener("click", () => {
+        mover(direccion);
+        programar(pausa + transicion);
+        if (flecha) {
+          flecha.classList.remove("empujon");
+          void flecha.offsetWidth; // reinicia la animación si se hace clic seguido
+          flecha.classList.add("empujon");
+        }
+      });
+      // Al terminar el empujón, la flecha retoma el vaivén al mismo ritmo que la otra
+      flecha?.addEventListener("animationend", () => {
+        if (!flecha.classList.contains("empujon")) return;
+        flecha.classList.remove("empujon");
+        const otra = seccion.querySelector<HTMLElement>(
+          direccion < 0 ? ".tiendas-flecha-derecha" : ".tiendas-flecha-izquierda"
+        );
+        const [propia] = flecha.getAnimations();
+        const [ajena] = otra?.getAnimations() ?? [];
+        if (propia && ajena) propia.currentTime = ajena.currentTime;
+      });
+    });
   }
 </script>
